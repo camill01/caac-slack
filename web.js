@@ -2,15 +2,21 @@ var express = require('express');
 var bodyParser = require('body-parser')
 
 var app = express();
-app.set('port', (process.env.PORT || 5000));
-
+//app.set('port', (process.env.PORT || 5000));
 
 var jsonParser = bodyParser.json();
+
+console.log( "Initialized" );
 
 // POST /test gives hello world to console
 app.post('/test', jsonParser, function (req, res) {
   console.log( "Hello World!" );
-})
+});
+
+var port = process.env.PORT || 5000;
+app.listen(port, function() {
+	console.log( "Listening on " + port);
+});
 
 
 /*app.post("/", function(req, res) {
