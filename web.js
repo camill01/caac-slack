@@ -12,7 +12,6 @@ console.log( "Initialized" );
 // Process an incoming CAAC WebHook
 app.post('/caacnotify', jsonParser, function (req, res) {
 	console.log("CAAC WebHook Incoming!");
-	req.end();
 	res.end();
 });
 
