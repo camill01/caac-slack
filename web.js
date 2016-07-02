@@ -13,13 +13,13 @@ console.log( "Initialized" );
 app.post('/caacnotify', jsonParser, function (req, res) {
 	console.log(req.body);
 	
-	var action = req.body.action;
+	var action = req.body.message.action;
 	console.log(action);
-	var field = req.body.changes.display_name;
+	/*var field = req.body.message.changes.display_name;
 	console.log(field);
-	var newValue = req.body.changes.value;
-	console.log(newValue);
-	var detailLink = req.body.detail_link;
+	var newValue = req.body.message.changes.value;
+	console.log(newValue);*/
+	var detailLink = req.body.message.detail_link;
 	console.log(detailLink);
 	
 	
