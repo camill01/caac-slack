@@ -23,7 +23,7 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 	console.log(detailLink);
 	
 	for ( var prop in req.body.message.changes ) {
-		console.log(req.body.message[prop]);
+		console.log(req.body.message.changes[prop]);
 	}
 	
 	var options = {
