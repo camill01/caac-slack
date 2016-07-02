@@ -23,19 +23,19 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 	console.log(detailLink);
 	
 	for ( var prop in req.body.message.changes ) {
-		console.log(prop);
+		console.log(req.body.message[prop]);
 	}
 	
 	var options = {
 	    hostname : 'hooks.slack.com' ,
-	    path     : '/services/T1N5XSJVA/B1N4TJEJF/DfvcOqV4Xbedxi6BXsWJYflU' ,
+	    path     : '/services/T1N5XSJVA/B1N4TJEJF/DfvcOqV4Xbedxi6BXsWJYflU',
 	    method   : 'POST'
 	};
 
 	var payload1 = {
     //	"channel"    : "test" ,
     //	"username"   : "masterbot" ,
-    	"text"       : action + " work item! <a href='" + detailLink + "'>Click here for details</a>",
+    	"text"       : action + " work item! <" + detailLink + "|Click here for details>",
     	"icon_emoji" : ":bowtie:"
 	};
 
