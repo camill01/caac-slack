@@ -11,6 +11,17 @@ console.log( "Initialized" );
 
 // Process an incoming CAAC WebHook
 app.post('/caacnotify', jsonParser, function (req, res) {
+	var action = req.body.action;
+	console.log(action);
+	var field = req.body.changes.display_name;
+	console.log(field);
+	var newValue = req.body.changes.value;
+	console.log(newValue);
+	var detailLink = req.body.detail_link;
+	console.log(detailLink);
+	
+	
+	
 	var options = {
 	    hostname : 'hooks.slack.com' ,
 	    path     : '/services/T1N5XSJVA/B1N4TJEJF/DfvcOqV4Xbedxi6BXsWJYflU' ,
