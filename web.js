@@ -22,7 +22,9 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 	var detailLink = req.body.message.detail_link;
 	console.log(detailLink);
 	
-	
+	for ( var prop in req.body.message.changes ) {
+		console.log(prop);
+	}
 	
 	var options = {
 	    hostname : 'hooks.slack.com' ,
@@ -33,8 +35,8 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 	var payload1 = {
     //	"channel"    : "test" ,
     //	"username"   : "masterbot" ,
-    	"text"       : "Boo!",
-    	"icon_emoji" : ":ghost:"
+    	"text"       : action + " work item! <a href='" + detailLink + "'>Click here for details</a>",
+    	"icon_emoji" : ":bowtie:"
 	};
 
 	var req = https.request( options , function (res , b , c) {
