@@ -11,6 +11,8 @@ console.log( "Initialized" );
 
 // Process an incoming CAAC WebHook
 app.post('/caacnotify', jsonParser, function (req, res) {
+	console.log(req.body);
+	
 	var action = req.body.action;
 	console.log(action);
 	var field = req.body.changes.display_name;
