@@ -1,6 +1,8 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var https = require('https');
+var pg = require('pg');
+pg.defaults.ssl = true;
 
 var app = express();
 //app.set('port', (process.env.PORT || 5000));
@@ -81,11 +83,31 @@ app.get('/slackauth', jsonParser, function (req, res) {
 		console.log("Response from Slack on OAuth");
 		console.log('statusCode: ', res.statusCode);
 		
+		var teamId = '';
+		var teamName = '';
+		var channelId = '';
+		var channelName = '';
+		var webhookUrl = '';
+		
     	resOAuth.setEncoding( 'utf8' );
     	resOAuth.on('data', (d) => {
-    		console.log( d );
+    		teamId = d.team_id;
+    		teamName = d.team_name;
+    		channelId = d.incoming_webhook.channel_id;
+    		channelName = d.incoming_webhook.channel_name;
+    		webhookUrl = d.incoming_webhook.url;
   		});
-	} );
+  		
+  		// Save info to Database
+  		pg.connect( process.env.DATABASE_URL, function( err, client ) {
+  			if ( err ) throw err;
+  			console.log('Connected to DB');
+  			client.query('INSERT INTO slack_teams ( slack_team_id, slack_team_name) VALUES (' + 
+  				teamId + ',' + teamName +')';
+  			client.query('INSERT INTO slack_incoming_webhooks ( slack_channel_id, slack_channel_name, slack_team_id, slack_webhook_url ) VALUES (' +
+  				channelId + ',' + channelName + ',' + teamId + ',' + webhookUrl + ')';
+  		} );
+  	} );
 	
 	req.on( 'error' , function (e) {
    		console.log( 'problem with request: ' + e.message );
