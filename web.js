@@ -59,12 +59,12 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 			
 			var payload = {
 				"attachments" : {
-					"fallback" : action + " <" + detailLink + "|" + formattedId + "> " + name,
-					"color" : displayColor,
-					"author_name" : username,
-					"title" : formattedId + ": " + name,
-					"title_link" : detailLink,
-					"fields" : changes,
+					"fallback" : '"' + action + " <" + detailLink + "|" + formattedId + "> " + name + '"',
+					"color" : '"' + displayColor + '"',
+					"author_name" : '"' + username + '"',
+					"title" : '"' + formattedId + ": " + name + '"',
+					"title_link" : '"' + detailLink + '"',
+					//"fields" : changes,
 					"ts" : timestamp
 				}
 			};
