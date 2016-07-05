@@ -98,7 +98,7 @@ app.get('/slackauth', jsonParser, function (req, res) {
     		teamId = data.team_id;
     		teamName = data.team_name;
     		channelId = data.incoming_webhook.channel_id;
-    		channelName = data.incoming_webhook.channel_name;
+    		channelName = data.incoming_webhook.channel;
     		webhookUrl = data.incoming_webhook.url;
 
 	  		// Save info to Database
