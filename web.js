@@ -30,7 +30,8 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 	
 	var changes = [];
 	for ( var prop in req.body.message.changes ) {
-		if ( BLACKLISTED_FIELDS.indexOf( req.body.message.changes[prop].display_name ) != -1 ) {
+		var field = req.body.message.changes[prop].display_name;
+		if ( BLACKLISTED_FIELDS.indexOf( field ) != -1 ) {
 			var newChange = {};
 			newChange.title = req.body.message.changes[prop].display_name;
 			console.log(req.body.message.changes[prop].old_value);
@@ -39,6 +40,8 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 			newChange.short = false;
 			changes.push(newChange);
 			console.log(newChange);
+		} else {
+			console.log( 'Ignored ' + field );
 		}
 	};
 	
