@@ -58,16 +58,18 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 			console.log( options );
 			
 			var payload = {
-				"text" : '"' + action + " <" + detailLink + "|" + formattedId + "> " + name + '"',
-				"attachments" : {
-					"fallback" : '"' + action + " <" + detailLink + "|" + formattedId + "> " + name + '"',
-					"color" : '"' + displayColor + '"',
-					"author_name" : '"' + username + '"',
-					"title" : '"' + formattedId + ": " + name + '"',
-					"title_link" : '"' + detailLink + '"',
-					//"fields" : changes,
-					"ts" : timestamp
-				}
+				"text" : action + " <" + detailLink + "|" + formattedId + "> " + name,
+				"attachments" : [
+					{
+						"fallback" : '"' + action + " <" + detailLink + "|" + formattedId + "> " + name + '"',
+						"color" : '"' + displayColor + '"',
+						"author_name" : '"' + username + '"',
+						"title" : '"' + formattedId + ": " + name + '"',
+						"title_link" : '"' + detailLink + '"',
+						//"fields" : changes,
+						"ts" : timestamp
+					}
+				]
 			};
 			
 			console.log( payload );
