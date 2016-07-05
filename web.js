@@ -47,7 +47,7 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 	
 	var options = {
 	    hostname : 'hooks.slack.com' ,
-	    path : slack_incoming_webhook.replace('https://hooks.slack.com', ''),
+	    path : webhookUrl.replace('https://hooks.slack.com', ''),
 	    method : 'POST'
 	};
 
