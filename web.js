@@ -65,14 +65,6 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 					"fields" : changes
 				}
 			};
-			
-			for ( var prop in req.body.message.changes ) {
-				var newChange = {};
-				newChange.title = req.body.message.changes[prop].display_name;
-				newChange.value = req.body.message.changes[prop].old_value + ' -> ' + req.body.message.changes[prop].value;
-				newChange.short = false;
-				payload.attachments.fields.push(newChange);
-			}
 
 			var req = https.request( options , function (res , b , c) {
 				res.setEncoding( 'utf8' );
