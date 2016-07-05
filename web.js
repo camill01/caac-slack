@@ -55,7 +55,7 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 			};
 
 			var payload = {
-				"text" : action + " <" + detailLink + "|" + formattedId"> " + name + " -- " + displayColor,
+				"text" : action + " <" + detailLink + "|" + formattedId + "> " + name + " -- " + displayColor,
 			};
 
 			var req = https.request( options , function (res , b , c) {
