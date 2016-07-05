@@ -1,12 +1,15 @@
+var BLACKLISTED_FIELDS = [
+	'VersionId',
+	'In Progress Date',
+	'Drag And Drop Rank'
+];
+
 var express = require('express');
 var bodyParser = require('body-parser');
 var https = require('https');
 var pg = require('pg');
 pg.defaults.ssl = true;
-
 var app = express();
-//app.set('port', (process.env.PORT || 5000));
-
 var jsonParser = bodyParser.json();
 
 console.log( "Initialized" );
@@ -27,12 +30,23 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 	
 	var changes = [];
 	for ( var prop in req.body.message.changes ) {
-		var newChange = {};
-		newChange.title = req.body.message.changes[prop].display_name;
-		newChange.value = req.body.message.changes[prop].old_value + ' -> ' + req.body.message.changes[prop].value;
-		newChange.short = false;
-		changes.push(newChange);
-		console.log(newChange);
+		if ( BLACKLISTED_FIELDS.indexOf( req.body.req.body.message.changes[prop].display_name ) != -1 ) {
+			var newChange = {};
+			newChange.title = req.body.message.changes[prop].display_name;
+			console.log(req.body.message.changes[prop].old_value);
+			console.log(req.body.message.changes[prop].value);
+			newChange.value = req.body.message.changes[prop].old_value + ' :arrow_right: ' + req.body.message.changes[prop].value;
+			newChange.short = false;
+			changes.push(newChange);
+			console.log(newChange);
+		}
+	};
+	
+	if ( changes.length == 0 ) {
+		console.log('No relevant changes were found.');
+		req.end();
+		res.end();
+		return;
 	};
 	
 	// Look up the relevant Slack webhook
