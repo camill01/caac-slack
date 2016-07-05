@@ -45,16 +45,16 @@ app.post('/caacnotify', jsonParser, function (req, res) {
   		dbQuery = "SELECT slack_incoming_webhook FROM slack_incoming_webhooks WHERE slack_channel_id = 'C1N5XSP36';"; 
   		client.query( dbQuery ).on('row', function (row) {
   			var rowData = JSON.stringify(row);
-  			console.log(rowData);
   			webhookUrl = row.slack_incoming_webhook;
   			
-			console.log(webhookUrl);
 			var options = {
 				hostname : 'hooks.slack.com' ,
 				path : webhookUrl.replace('https://hooks.slack.com', ''),
 				method : 'POST'
 			};
-
+			
+			console.log( options );
+			
 			var payload = {
 				"attachments" : {
 					"fallback" : action + " <" + detailLink + "|" + formattedId + "> " + name,
@@ -65,6 +65,8 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 					"fields" : changes
 				}
 			};
+			
+			console.log( payload );
 
 			var req = https.request( options , function (res , b , c) {
 				res.setEncoding( 'utf8' );
