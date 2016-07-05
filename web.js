@@ -16,18 +16,18 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 	//console.log(req.body);
 	
 	var action = req.body.message.action;
-	console.log(action);
+//	console.log(action);
 	/*var field = req.body.message.changes.display_name;
 	console.log(field);
 	var newValue = req.body.message.changes.value;
 	console.log(newValue);*/
 	var detailLink = req.body.message.detail_link;
-	console.log(detailLink);
+//	console.log(detailLink);
 	
-	for ( var prop in req.body.message.changes ) {
+/*	for ( var prop in req.body.message.changes ) {
 		console.log(req.body.message.changes[prop]);
 	}
-	
+*/	
 	// Look up the relevant Slack webhook
 	var webhookUrl = '';
 	pg.connect( process.env.DATABASE_URL, function( err, client ) {
@@ -67,6 +67,9 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 	req.on( 'error' , function (e) {
    		console.log( 'problem with request: ' + e.message );
 	} );
+	
+	console.log(options);
+	console.log(payload1);
 
 	req.write( JSON.stringify( payload1 ) );
 	req.end();
