@@ -92,7 +92,7 @@ app.get('/slackauth', jsonParser, function (req, res) {
     	resOAuth.setEncoding( 'utf8' );
     	resOAuth.on('data', (d) => {
     		console.log( d );
-    		console.log ( d."ok" );
+    		console.log ( d["ok"] );
     		if ( d.ok == false ) {
     			return new Error("Error with Slack Response: " + d);
     		}
