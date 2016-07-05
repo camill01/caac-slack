@@ -76,16 +76,20 @@ app.get('/slackauth', jsonParser, function (req, res) {
     	"redirect_uri" : "https://lower-donair-82094.herokuapp.com/slackauth"
 	};
 	
-	var req = https.request( options , resOAuth => {
+	var reqOAuth = https.request( options , resOAuth => {
 		console.log("Response from Slack");
 		console.log('statusCode: ', res.statusCode);
 		
     	resOAuth.setEncoding( 'utf8' );
     	resOAuth.on('data', (d) => {
-    		console.log( resOAuth );
+    		console.log( d );
   		});
 	} );
-
+	
+	reqOAuth.on( 'error' , funciont (e) {
+		console.log( 'problem with request: ' + e.message );
+	} )
+	
 	req.on( 'error' , function (e) {
    		console.log( 'problem with request: ' + e.message );
 	} );
