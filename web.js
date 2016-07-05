@@ -115,7 +115,7 @@ app.get('/slackauth', jsonParser, function (req, res) {
   				client.query( dbQuery );
   				
   				console.log('Adding Slack Webhook to DB');
-  				dbQuery = "INSERT INTO slack_incoming_webhooks ( slack_channel_id, slack_channel_name, slack_team_id, slack_webhook_url ) VALUES ('" + channelId + "','" + channelName + "','" + teamId + "','" + webhookUrl + "');"; 
+  				dbQuery = "INSERT INTO slack_incoming_webhooks ( slack_channel_id, slack_channel_name, slack_team_id, slack_incoming_webhook ) VALUES ('" + channelId + "','" + channelName + "','" + teamId + "','" + webhookUrl + "');"; 
   				client.query( dbQuery );
   			} );
   		} );
