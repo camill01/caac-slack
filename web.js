@@ -69,7 +69,7 @@ app.get('/slackauth', jsonParser, function (req, res) {
 	    		process.env.SLACK_CLIENT_SECRET +
 	    		'&code=' +
 	    		temporaryCode +
-	    		'&redirect_uri" +
+	    		'&redirect_uri' +
 	    		"https://lower-donair-82094.herokuapp.com/slackauth",
 	    method  : 'GET',
 	    headers : {
