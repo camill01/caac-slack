@@ -46,8 +46,14 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 				old_value = req.body.message.changes[prop].old_value.value;
 				new_value = req.body.message.changes[prop].value.value;
 			} else if ( field == "Blocker" ) {
-				old_value = req.body.message.changes[prop].old_value.name;
-				new_value = req.body.message.changes[prop].value.name;
+				old_value = req.body.message.changes[prop].old_value;
+				if (old_value !== null ) {
+					old_value = old_value.name;
+				}
+				new_value = req.body.message.changes[prop].value;
+				if (new_value !== null ) {
+					new_value = new_value.name;
+				}
 			} else {
 				old_value = req.body.message.changes[prop].old_value;
 				new_value = req.body.message.changes[prop].value;
