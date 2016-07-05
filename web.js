@@ -1,8 +1,6 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var https = require('https');
-var slackClientId = process.env.SLACK_CLIENT_ID;
-var slackClientSecret = process.env.SLACK_CLIENT_SECRET;
 
 var app = express();
 //app.set('port', (process.env.PORT || 5000));
@@ -70,13 +68,14 @@ app.get('/slackauth', jsonParser, function (req, res) {
 	    path  : '/api/oauth.access',
 	    method  : 'POST',
 	    headers : {
-	    	'Content-type' : 'application/json'
+	    	'Content-type' : 'application/json',
+	    	'charset' : 'utf-8'
 	    }
 	};
 
 	var payload = {
-    	"client_id" : slackClientId,
-    	"client_secret" : slackClientSecret,
+    	"client_id" : process.env.SLACK_CLIENT_ID,
+    	"client_secret" : process.env.SLACK_CLIENT_SECRET,
     	"code" : temporaryCode,
     	"redirect_uri" : "https://lower-donair-82094.herokuapp.com/slackauth"
 	};
