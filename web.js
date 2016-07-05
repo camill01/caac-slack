@@ -45,7 +45,7 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 				new_value = req.body.message.changes[prop].value;
 			}
 			
-			newChange.value = old_value + ' :arrow_right: ' + new_value;
+			newChange.value = old_value + ' ➜ ' + new_value;
 			newChange.short = false;
 			changes.push(newChange);
 			console.log(newChange);
