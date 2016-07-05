@@ -73,7 +73,7 @@ app.get('/slackauth', jsonParser, function (req, res) {
 	    		encodeURIComponent( "https://lower-donair-82094.herokuapp.com/slackauth" ),
 	    method  : 'GET',
 	    headers : {
-	    	'Content-type' : 'application/json; charset=utf-8'
+	    	'Content-type' : 'application/x-www-form-urlencoded; charset=utf-8'
 	    }
 	};
 
