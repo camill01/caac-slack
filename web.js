@@ -76,13 +76,13 @@ app.get('/slackauth', jsonParser, function (req, res) {
     	"redirect_uri" : "https://lower-donair-82094.herokuapp.com/slackauth"
 	};
 	
-	var req = https.request( options , res => {
+	var req = https.request( options , resOAuth => {
 		console.log("Response from Slack");
 		console.log('statusCode: ', res.statusCode);
 		
-    	res.setEncoding( 'utf8' );
-    	res.on('data', (d) => {
-    		console.log( res.body.access_token );
+    	resOAuth.setEncoding( 'utf8' );
+    	resOAuth.on('data', (d) => {
+    		console.log( resOAuth );
   		});
 	} );
 
