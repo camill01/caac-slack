@@ -11,9 +11,9 @@ var jsonParser = bodyParser.json();
 
 console.log( "Initialized" );
 
-// Process an incoming CAAC WebHook
+/* Test to process an incoming CAAC WebHook */
 app.post('/caacnotify', jsonParser, function (req, res) {
-	console.log(req.body);
+	//console.log(req.body);
 	
 	var action = req.body.message.action;
 	console.log(action);
@@ -28,10 +28,26 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 		console.log(req.body.message.changes[prop]);
 	}
 	
+	// Look up the relevant Slack webhook
+	var webhookUrl = '';
+	pg.connect( process.env.DATABASE_URL, function( err, client ) {
+  		if ( err ) {
+  			console.log("Error with DB: " + err );
+  			return;
+  		}
+  		console.log('Connected to DB');
+  		
+  		console.log('Retrieving WebHook URL');
+  		dbQuery = "SELECT slack_incoming_webhook FROM slack_incoming_webhooks WHERE slack_channel_id = C1N5XSP36;"; 
+  		client.query( dbQuery ).on('row', function (row) {
+  			var rowData = JSON.stringify(row);
+  			webhookUrl = row.slack_incoming_webhook;
+  	} );
+	
 	var options = {
 	    hostname : 'hooks.slack.com' ,
-	    path     : '/services/T1N5XSJVA/B1NVCECNM/oQWjsjS149rYBjmksr8a3COV',
-	    method   : 'POST'
+	    path : slack_incoming_webhook.replace('https://hooks.slack.com', ''),
+	    method : 'POST'
 	};
 
 	var payload1 = {
@@ -111,13 +127,13 @@ app.get('/slackauth', jsonParser, function (req, res) {
   				
   				console.log('Adding Slack Team to DB');
   				var dbQuery = "INSERT INTO slack_teams ( slack_team_id, slack_team_name) VALUES ('" + teamId + "','" + teamName + "');";
-  				console.log(dbQuery);
   				client.query( dbQuery );
   				
   				console.log('Adding Slack Webhook to DB');
   				dbQuery = "INSERT INTO slack_incoming_webhooks ( slack_channel_id, slack_channel_name, slack_team_id, slack_incoming_webhook ) VALUES ('" + channelId + "','" + channelName + "','" + teamId + "','" + webhookUrl + "');"; 
   				client.query( dbQuery );
   			} );
+  			console.log( 'Slack Credentials added to DB');
   		} );
   	} );
 	
