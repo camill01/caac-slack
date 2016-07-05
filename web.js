@@ -81,7 +81,6 @@ app.get('/slackauth', jsonParser, function (req, res) {
 	
 	var req = https.request( options , resOAuth => {
 		console.log("Response from Slack on OAuth");
-		console.log('statusCode: ', res.statusCode);
 		
 		var teamId = '';
 		var teamName = '';
@@ -109,10 +108,15 @@ app.get('/slackauth', jsonParser, function (req, res) {
   					return;
   				}
   				console.log('Connected to DB');
-  				client.query('INSERT INTO slack_teams ( slack_team_id, slack_team_name) VALUES (' + 
-  					teamId + ',' + teamName + ')' );
-  				client.query('INSERT INTO slack_incoming_webhooks ( slack_channel_id, slack_channel_name, slack_team_id, slack_webhook_url ) VALUES (' +
-  					channelId + ',' + channelName + ',' + teamId + ',' + webhookUrl + ')' );
+  				
+  				console.log('Adding Slack Team to DB');
+  				var dbQuery = 'INSERT INTO slack_teams ( slack_team_id, slack_team_name) VALUES (' + teamId + ',' + teamName + ')'
+  				console.log(dbQuery);
+  				client.query( dbQuery );
+  				
+  				console.log('Adding Slack Webhook to DB');
+  				dbQuery = 'INSERT INTO slack_incoming_webhooks ( slack_channel_id, slack_channel_name, slack_team_id, slack_webhook_url ) VALUES (' + channelId + ',' + channelName + ',' + teamId + ',' + webhookUrl + ')' 
+  				client.query( dbQuery );
   			} );
   		} );
   	} );
