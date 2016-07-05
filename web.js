@@ -32,6 +32,7 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 		newChange.value = req.body.message.changes[prop].old_value + ' -> ' + req.body.message.changes[prop].value;
 		newChange.short = false;
 		changes.push(newChange);
+		console.log(newChange);
 	};
 	
 	// Look up the relevant Slack webhook
@@ -57,7 +58,7 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 			console.log( options );
 			
 			var payload = {
-		/*		"attachments" : {
+				"attachments" : {
 					"fallback" : action + " <" + detailLink + "|" + formattedId + "> " + name,
 					"color" : displayColor,
 					"author_name" : username,
@@ -65,8 +66,7 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 					"title_link" : detailLink,
 					"fields" : changes,
 					"ts" : timestamp
-				} */
-				"text" : "Ping!"
+				}
 			};
 			
 			console.log( payload );
