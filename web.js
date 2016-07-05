@@ -13,6 +13,7 @@ console.log( "Initialized" );
 
 /* Test to process an incoming CAAC WebHook */
 app.post('/caacnotify', jsonParser, function (req, res) {
+	console.log( 'CAAC Callback starting...');
 	//console.log(req.body);
 	
 	var action = req.body.message.action;
@@ -21,13 +22,16 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 	console.log(field);
 	var newValue = req.body.message.changes.value;
 	console.log(newValue);*/
+	var name = req.body.message.state["500a0d67-9c48-4145-920c-821033e4a832"].value;
+	var displayColor = req.body.message.state["b0778de0-a927-11e2-9e96-0800200c9a66"].value;
+	var formattedId = req.body.message.state["55c5512a-1518-4944-8597-3eb91875e8d1"].value;
 	var detailLink = req.body.message.detail_link;
 //	console.log(detailLink);
 	
-/*	for ( var prop in req.body.message.changes ) {
+	for ( var prop in req.body.message.changes ) {
 		console.log(req.body.message.changes[prop]);
 	}
-*/	
+	
 	// Look up the relevant Slack webhook
 	var webhookUrl = '';
 	pg.connect( process.env.DATABASE_URL, function( err, client ) {
@@ -36,7 +40,6 @@ app.post('/caacnotify', jsonParser, function (req, res) {
   			return;
   		}
   		console.log('Connected to DB');
-  		
   		console.log('Retrieving WebHook URL');
   		dbQuery = "SELECT slack_incoming_webhook FROM slack_incoming_webhooks WHERE slack_channel_id = 'C1N5XSP36';"; 
   		client.query( dbQuery ).on('row', function (row) {
@@ -51,11 +54,8 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 				method : 'POST'
 			};
 
-			var payload1 = {
-			//	"channel"    : "test" ,
-			//	"username"   : "masterbot" ,
-				"text"       : action + " work item! <" + detailLink + "|Click here for details>",
-				"icon_emoji" : ":bowtie:"
+			var payload = {
+				"text" : action + " <" + detailLink + "|" + formattedId"> " + name + " -- " + displayColor,
 			};
 
 			var req = https.request( options , function (res , b , c) {
@@ -67,11 +67,8 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 			req.on( 'error' , function (e) {
 				console.log( 'problem with request: ' + e.message );
 			} );
-	
-			console.log(options);
-			console.log(payload1);
 
-			req.write( JSON.stringify( payload1 ) );
+			req.write( JSON.stringify( payload ) );
 			req.end();
 			res.end();
 		} );
