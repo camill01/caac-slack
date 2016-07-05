@@ -86,7 +86,7 @@ app.get('/slackauth', jsonParser, function (req, res) {
   		});
 	} );
 	
-	reqOAuth.on( 'error' , funciont (e) {
+	reqOAuth.on( 'error' , function (e) {
 		console.log( 'problem with request: ' + e.message );
 	} );
 	
