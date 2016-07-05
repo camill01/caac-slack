@@ -58,6 +58,7 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 			console.log( options );
 			
 			var payload = {
+				"text" : '"' + action + " <" + detailLink + "|" + formattedId + "> " + name + '"',
 				"attachments" : {
 					"fallback" : '"' + action + " <" + detailLink + "|" + formattedId + "> " + name + '"',
 					"color" : '"' + displayColor + '"',
