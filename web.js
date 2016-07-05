@@ -76,6 +76,8 @@ app.get('/slackauth', jsonParser, function (req, res) {
 	    	'Content-type' : 'application/x-www-form-urlencoded; charset=utf-8'
 	    }
 	};
+	
+	console.log(options.path);
 
 	/*var payload = {
     	"client_id" : process.env.SLACK_CLIENT_ID,
