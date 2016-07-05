@@ -91,6 +91,8 @@ app.get('/slackauth', jsonParser, function (req, res) {
 		
     	resOAuth.setEncoding( 'utf8' );
     	resOAuth.on('data', (d) => {
+    		console.log( d );
+    		console.log( d.team_id );
     		teamId = d.team_id;
     		teamName = d.team_name;
     		channelId = d.incoming_webhook.channel_id;
