@@ -93,7 +93,7 @@ app.get('/slackauth', jsonParser, function (req, res) {
     	resOAuth.on('data', (d) => {
     		console.log( d );
     		if ( d.ok == false ) {
-    			throw "Error with Slack Response: " + d;
+    			return new Error("Error with Slack Response: " + d);
     		}
     		teamId = d.team_id;
     		teamName = d.team_name;
