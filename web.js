@@ -96,11 +96,11 @@ app.get('/slackauth', jsonParser, function (req, res) {
     			console.log("Error with Slack Response: " + d);
     			return;
     		}
-    		teamId = d.team_id;
-    		teamName = d.team_name;
-    		channelId = d.incoming_webhook.channel_id;
-    		channelName = d.incoming_webhook.channel_name;
-    		webhookUrl = d.incoming_webhook.url;
+    		teamId = data.team_id;
+    		teamName = data.team_name;
+    		channelId = data.incoming_webhook.channel_id;
+    		channelName = data.incoming_webhook.channel_name;
+    		webhookUrl = data.incoming_webhook.url;
 
 	  		// Save info to Database
   			pg.connect( process.env.DATABASE_URL, function( err, client ) {
