@@ -60,8 +60,6 @@ app.get('/slackauth', jsonParser, function (req, res) {
 	
 	var temporaryCode = req.query.code;
 	console.log('Received temporary code');
-	console.log('My Client ID - ' + slackClientId );
-	console.log('My Client ID - ' + process.env.SLACK_CLIENT_ID);
 	
 	var options = {
 	    hostname : 'slack.com' ,
