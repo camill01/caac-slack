@@ -17,20 +17,12 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 	//console.log(req.body);
 	
 	var action = req.body.message.action;
-//	console.log(action);
-	/*var field = req.body.message.changes.display_name;
-	console.log(field);
-	var newValue = req.body.message.changes.value;
-	console.log(newValue);*/
 	var name = req.body.message.state["500a0d67-9c48-4145-920c-821033e4a832"].value;
 	var displayColor = req.body.message.state["b0778de0-a927-11e2-9e96-0800200c9a66"].value;
 	var formattedId = req.body.message.state["55c5512a-1518-4944-8597-3eb91875e8d1"].value;
 	var detailLink = req.body.message.detail_link;
-//	console.log(detailLink);
-	
-	for ( var prop in req.body.message.changes ) {
-		console.log(req.body.message.changes[prop]);
-	}
+	var username = req.body.message.transaction.username;
+	var userUuid = req.body.message.transaction.uuid;
 	
 	// Look up the relevant Slack webhook
 	var webhookUrl = '';
@@ -55,8 +47,23 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 			};
 
 			var payload = {
-				"text" : action + " <" + detailLink + "|" + formattedId + "> " + name + " -- " + displayColor,
+				"attachments" : {
+					"fallback" : action + " <" + detailLink + "|" + formattedId + "> " + name,
+					"color" : displayColor,
+					"author_name" : username,
+					"title" : formattedId + ": " + name,
+					"title_link" : detailLink,
+					"fields" : []
+				}
 			};
+			
+			for ( var prop in req.body.message.changes ) {
+				var newChange = {};
+				newChange.title = req.body.message.changes[prop].display_name;
+				newChange.value = req.body.message.changes[prop].old_value + ' -> ' + req.body.message.changes[prop].value;
+				newChange.short = false;
+				payload.attachments.fields.push(newChange);
+			}
 
 			var req = https.request( options , function (res , b , c) {
 				res.setEncoding( 'utf8' );
