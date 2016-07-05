@@ -35,9 +35,14 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 			var newChange = {};
 			newChange.title = req.body.message.changes[prop].display_name;
 			
+			console.log( req.body.message.changes[prop].value )
+			
 			var old_value = "";
 			var new_value = "";
 			if ( field == "Schedule State" ) {
+				old_value = req.body.message.changes[prop].old_value.name;
+				new_value = req.body.message.changes[prop].value.name;
+			} else if ( field == "Plan Estimate" ) {
 				old_value = req.body.message.changes[prop].old_value.name;
 				new_value = req.body.message.changes[prop].value.name;
 			} else {
@@ -48,7 +53,6 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 			newChange.value = old_value + ' ➜ ' + new_value;
 			newChange.short = false;
 			changes.push(newChange);
-			console.log(newChange);
 		} else {
 			console.log( 'Ignored ' + field );
 		}
@@ -56,7 +60,6 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 	
 	if ( changes.length == 0 ) {
 		console.log('No relevant changes were found.');
-		req.end();
 		res.end();
 		return;
 	};
