@@ -63,21 +63,28 @@ app.get('/slackauth', jsonParser, function (req, res) {
 	
 	var options = {
 	    hostname : 'slack.com' ,
-	    path  : '/api/oauth.access',
+	    path  : '/api/oauth.access?client_id=' +
+	    		process.env.SLACK_CLIENT_ID +
+	    		'&client_secret=' + 
+	    		process.env.SLACK_CLIENT_SECRET +
+	    		'&code=' +
+	    		temporaryCode +
+	    		'&redirect_uri" +
+	    		"https://lower-donair-82094.herokuapp.com/slackauth",
 	    method  : 'GET',
 	    headers : {
 	    	'Content-type' : 'application/json; charset=utf-8'
 	    }
 	};
 
-	var payload = {
+	/*var payload = {
     	"client_id" : process.env.SLACK_CLIENT_ID,
     	"client_secret" : process.env.SLACK_CLIENT_SECRET,
     	"code" : temporaryCode,
     	"redirect_uri" : "https://lower-donair-82094.herokuapp.com/slackauth"
-	};
+	};*/
 	
-	console.log(payload);
+	//console.log(payload);
 	
 	var req = https.request( options , resOAuth => {
 		console.log("Response from Slack");
@@ -93,7 +100,7 @@ app.get('/slackauth', jsonParser, function (req, res) {
    		console.log( 'problem with request: ' + e.message );
 	} );
 
-	req.write( JSON.stringify( payload ) );
+	//req.write( JSON.stringify( payload ) );
 	req.end();
 	
 	console.log('Slack Auth done...');
