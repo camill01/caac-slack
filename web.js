@@ -103,9 +103,9 @@ app.get('/slackauth', jsonParser, function (req, res) {
   			if ( err ) throw err;
   			console.log('Connected to DB');
   			client.query('INSERT INTO slack_teams ( slack_team_id, slack_team_name) VALUES (' + 
-  				teamId + ',' + teamName +')';
+  				teamId + ',' + teamName + ')' );
   			client.query('INSERT INTO slack_incoming_webhooks ( slack_channel_id, slack_channel_name, slack_team_id, slack_webhook_url ) VALUES (' +
-  				channelId + ',' + channelName + ',' + teamId + ',' + webhookUrl + ')';
+  				channelId + ',' + channelName + ',' + teamId + ',' + webhookUrl + ')' );
   		} );
   	} );
 	
