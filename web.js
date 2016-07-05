@@ -43,6 +43,9 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 				old_value = req.body.message.changes[prop].old_value.name;
 				new_value = req.body.message.changes[prop].value.name;
 			} else if ( field == "Plan Estimate" ) {
+				old_value = req.body.message.changes[prop].old_value.value;
+				new_value = req.body.message.changes[prop].value.value;
+			} else if ( field == "Blocker" ) {
 				old_value = req.body.message.changes[prop].old_value.name;
 				new_value = req.body.message.changes[prop].value.name;
 			} else {
