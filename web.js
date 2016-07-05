@@ -110,12 +110,12 @@ app.get('/slackauth', jsonParser, function (req, res) {
   				console.log('Connected to DB');
   				
   				console.log('Adding Slack Team to DB');
-  				var dbQuery = 'INSERT INTO slack_teams ( slack_team_id, slack_team_name) VALUES ("' + teamId + '","' + teamName + '")'
+  				var dbQuery = "INSERT INTO slack_teams ( slack_team_id, slack_team_name) VALUES ('" + teamId + "','" + teamName + "');";
   				console.log(dbQuery);
   				client.query( dbQuery );
   				
   				console.log('Adding Slack Webhook to DB');
-  				dbQuery = 'INSERT INTO slack_incoming_webhooks ( slack_channel_id, slack_channel_name, slack_team_id, slack_webhook_url ) VALUES ("' + channelId + '","' + channelName + '","' + teamId + '","' + webhookUrl + '")' 
+  				dbQuery = "INSERT INTO slack_incoming_webhooks ( slack_channel_id, slack_channel_name, slack_team_id, slack_webhook_url ) VALUES ('" + channelId + "','" + channelName + "','" + teamId + "','" + webhookUrl + "');"; 
   				client.query( dbQuery );
   			} );
   		} );
