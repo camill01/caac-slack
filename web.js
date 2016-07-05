@@ -38,7 +38,7 @@ app.post('/caacnotify', jsonParser, function (req, res) {
   		console.log('Connected to DB');
   		
   		console.log('Retrieving WebHook URL');
-  		dbQuery = "SELECT slack_incoming_webhook FROM slack_incoming_webhooks WHERE slack_channel_id = C1N5XSP36;"; 
+  		dbQuery = "SELECT slack_incoming_webhook FROM slack_incoming_webhooks WHERE slack_channel_id = 'C1N5XSP36';"; 
   		client.query( dbQuery ).on('row', function (row) {
   			var rowData = JSON.stringify(row);
   			webhookUrl = row.slack_incoming_webhook;
