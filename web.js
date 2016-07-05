@@ -34,9 +34,18 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 		if ( BLACKLISTED_FIELDS.indexOf( field ) == -1 ) {
 			var newChange = {};
 			newChange.title = req.body.message.changes[prop].display_name;
-			console.log(req.body.message.changes[prop].old_value);
-			console.log(req.body.message.changes[prop].value);
-			newChange.value = req.body.message.changes[prop].old_value + ' :arrow_right: ' + req.body.message.changes[prop].value;
+			
+			var old_value = "";
+			var new_value = "";
+			if ( field == "Schedule State" ) {
+				old_value = req.body.message.changes[prop].old_value.name;
+				new_value = req.body.message.changes[prop].value.name;
+			} else {
+				old_value = req.body.message.changes[prop].old_value;
+				new_value = req.body.message.changes[prop].value;
+			}
+			
+			newChange.value = old_value + ' :arrow_right: ' + new_value;
 			newChange.short = false;
 			changes.push(newChange);
 			console.log(newChange);
