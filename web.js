@@ -40,42 +40,41 @@ app.post('/caacnotify', jsonParser, function (req, res) {
   		console.log('Retrieving WebHook URL');
   		dbQuery = "SELECT slack_incoming_webhook FROM slack_incoming_webhooks WHERE slack_channel_id = 'C1N5XSP36';"; 
   		client.query( dbQuery ).on('row', function (row) {
-  			console.log('Row: ' + row);
   			var rowData = JSON.stringify(row);
+  			console.log(rowData);
   			webhookUrl = row.slack_incoming_webhook;
-  		} );
-  		
-  		console.log(webhookUrl);
-  		var options = {
-			hostname : 'hooks.slack.com' ,
-			path : webhookUrl.replace('https://hooks.slack.com', ''),
-			method : 'POST'
-		};
+  			
+			console.log(webhookUrl);
+			var options = {
+				hostname : 'hooks.slack.com' ,
+				path : webhookUrl.replace('https://hooks.slack.com', ''),
+				method : 'POST'
+			};
 
-		var payload1 = {
-		//	"channel"    : "test" ,
-		//	"username"   : "masterbot" ,
-			"text"       : action + " work item! <" + detailLink + "|Click here for details>",
-			"icon_emoji" : ":bowtie:"
-		};
+			var payload1 = {
+			//	"channel"    : "test" ,
+			//	"username"   : "masterbot" ,
+				"text"       : action + " work item! <" + detailLink + "|Click here for details>",
+				"icon_emoji" : ":bowtie:"
+			};
 
-		var req = https.request( options , function (res , b , c) {
-			res.setEncoding( 'utf8' );
-			res.on( 'data' , function (chunk) {
+			var req = https.request( options , function (res , b , c) {
+				res.setEncoding( 'utf8' );
+				res.on( 'data' , function (chunk) {
+				} );
 			} );
-		} );
 
-		req.on( 'error' , function (e) {
-			console.log( 'problem with request: ' + e.message );
-		} );
+			req.on( 'error' , function (e) {
+				console.log( 'problem with request: ' + e.message );
+			} );
 	
-		console.log(options);
-		console.log(payload1);
+			console.log(options);
+			console.log(payload1);
 
-		req.write( JSON.stringify( payload1 ) );
-		req.end();
-		res.end();
-  		
+			req.write( JSON.stringify( payload1 ) );
+			req.end();
+			res.end();
+		} );
   	} );
 });
 
