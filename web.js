@@ -24,6 +24,15 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 	var username = req.body.message.transaction.username;
 	var userUuid = req.body.message.transaction.uuid;
 	
+	var changes = [];
+	for ( var prop in req.body.message.changes ) {
+		var newChange = {};
+		newChange.title = req.body.message.changes[prop].display_name;
+		newChange.value = req.body.message.changes[prop].old_value + ' -> ' + req.body.message.changes[prop].value;
+		newChange.short = false;
+		changes.push(newChange);
+	};
+	
 	// Look up the relevant Slack webhook
 	var webhookUrl = '';
 	pg.connect( process.env.DATABASE_URL, function( err, client ) {
@@ -53,7 +62,7 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 					"author_name" : username,
 					"title" : formattedId + ": " + name,
 					"title_link" : detailLink,
-					"fields" : []
+					"fields" : changes
 				}
 			};
 			
