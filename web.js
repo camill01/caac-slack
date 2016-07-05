@@ -70,7 +70,7 @@ app.get('/slackauth', jsonParser, function (req, res) {
 	    		'&code=' +
 	    		temporaryCode +
 	    		'&redirect_uri' +
-	    		"https://lower-donair-82094.herokuapp.com/slackauth",
+	    		encodeURIComponent( "https://lower-donair-82094.herokuapp.com/slackauth" ),
 	    method  : 'GET',
 	    headers : {
 	    	'Content-type' : 'application/json; charset=utf-8'
