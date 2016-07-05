@@ -104,7 +104,10 @@ app.get('/slackauth', jsonParser, function (req, res) {
 
 	  		// Save info to Database
   			pg.connect( process.env.DATABASE_URL, function( err, client ) {
-  				if ( err ) throw err;
+  				if ( err ) {
+  					console.log("Error with DB: " + err );
+  					return;
+  				}
   				console.log('Connected to DB');
   				client.query('INSERT INTO slack_teams ( slack_team_id, slack_team_name) VALUES (' + 
   					teamId + ',' + teamName + ')' );
