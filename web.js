@@ -1,7 +1,8 @@
 var BLACKLISTED_FIELDS = [
 	'VersionId',
 	'In Progress Date',
-	'Drag And Drop Rank'
+	'Drag And Drop Rank',
+	'Blocker'
 ];
 
 var express = require('express');
@@ -45,15 +46,6 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 			} else if ( field == "Plan Estimate" ) {
 				old_value = req.body.message.changes[prop].old_value.value;
 				new_value = req.body.message.changes[prop].value.value;
-			} else if ( field == "Blocker" ) {
-				old_value = req.body.message.changes[prop].old_value;
-				if (old_value !== null ) {
-					old_value = old_value.name;
-				}
-				new_value = req.body.message.changes[prop].value;
-				if (new_value !== null ) {
-					new_value = new_value.name;
-				}
 			} else {
 				old_value = req.body.message.changes[prop].old_value;
 				new_value = req.body.message.changes[prop].value;
