@@ -30,7 +30,7 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 	
 	var changes = [];
 	for ( var prop in req.body.message.changes ) {
-		if ( BLACKLISTED_FIELDS.indexOf( req.body.req.body.message.changes[prop].display_name ) != -1 ) {
+		if ( BLACKLISTED_FIELDS.indexOf( req.body.message.changes[prop].display_name ) != -1 ) {
 			var newChange = {};
 			newChange.title = req.body.message.changes[prop].display_name;
 			console.log(req.body.message.changes[prop].old_value);
