@@ -82,7 +82,7 @@ app.get('/slackauth', jsonParser, function (req, res) {
 		
     	res.setEncoding( 'utf8' );
     	res.on('data', (d) => {
-    		console.log( res );
+    		console.log( res.body.access_token );
   		});
 	} );
 
