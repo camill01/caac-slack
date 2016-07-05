@@ -28,7 +28,7 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 	
 	var options = {
 	    hostname : 'hooks.slack.com' ,
-	    path     : '/services/T1N5XSJVA/B1N4TJEJF/DfvcOqV4Xbedxi6BXsWJYflU',
+	    path     : '/services/T1N5XSJVA/B1NVCECNM/oQWjsjS149rYBjmksr8a3COV',
 	    method   : 'POST'
 	};
 
@@ -77,19 +77,8 @@ app.get('/slackauth', jsonParser, function (req, res) {
 	    }
 	};
 	
-	console.log(options.path);
-
-	/*var payload = {
-    	"client_id" : process.env.SLACK_CLIENT_ID,
-    	"client_secret" : process.env.SLACK_CLIENT_SECRET,
-    	"code" : temporaryCode,
-    	"redirect_uri" : "https://lower-donair-82094.herokuapp.com/slackauth"
-	};*/
-	
-	//console.log(payload);
-	
 	var req = https.request( options , resOAuth => {
-		console.log("Response from Slack");
+		console.log("Response from Slack on OAuth");
 		console.log('statusCode: ', res.statusCode);
 		
     	resOAuth.setEncoding( 'utf8' );
@@ -102,7 +91,6 @@ app.get('/slackauth', jsonParser, function (req, res) {
    		console.log( 'problem with request: ' + e.message );
 	} );
 
-	//req.write( JSON.stringify( payload ) );
 	req.end();
 	
 	console.log('Slack Auth done...');
