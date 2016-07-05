@@ -96,7 +96,7 @@ app.get('/slackauth', jsonParser, function (req, res) {
     		console.log ( data.ok );
     		if ( data.ok == false ) {
     			var err = new Error("Error with Slack Response: " + d);
-    			throw err;
+    			return;
     		}
     		teamId = d.team_id;
     		teamName = d.team_name;
