@@ -42,6 +42,7 @@ app.post('/caacnotify', jsonParser, function (req, res) {
   		client.query( dbQuery ).on('row', function (row) {
   			var rowData = JSON.stringify(row);
   			webhookUrl = row.slack_incoming_webhook;
+  		} );
   	} );
 	
 	var options = {
