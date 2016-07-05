@@ -21,8 +21,9 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 	var displayColor = req.body.message.state["b0778de0-a927-11e2-9e96-0800200c9a66"].value;
 	var formattedId = req.body.message.state["55c5512a-1518-4944-8597-3eb91875e8d1"].value;
 	var detailLink = req.body.message.detail_link;
-	var username = req.body.message.transaction.username;
-	var userUuid = req.body.message.transaction.uuid;
+	var username = req.body.message.transaction.user.username;
+	var userUuid = req.body.message.transaction.user.uuid;
+	var timestamp = req.body.message.transaction.timestamp;
 	
 	var changes = [];
 	for ( var prop in req.body.message.changes ) {
@@ -56,14 +57,16 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 			console.log( options );
 			
 			var payload = {
-				"attachments" : {
+		/*		"attachments" : {
 					"fallback" : action + " <" + detailLink + "|" + formattedId + "> " + name,
 					"color" : displayColor,
 					"author_name" : username,
 					"title" : formattedId + ": " + name,
 					"title_link" : detailLink,
-					"fields" : changes
-				}
+					"fields" : changes,
+					"ts" : timestamp
+				} */
+				"text" : "Ping!"
 			};
 			
 			console.log( payload );
