@@ -58,7 +58,7 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 			console.log( options );
 			
 			var payload = {
-				"text" : action + " <" + detailLink + "|" + formattedId + "> " + name,
+			//	"text" : action + " <" + detailLink + "|" + formattedId + "> " + name,
 				"attachments" : [
 					{
 						"fallback" : action + " <" + detailLink + "|" + formattedId + "> " + name,
@@ -66,8 +66,8 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 						"author_name" : username,
 						"title" : formattedId + ": " + name,
 						"title_link" : detailLink,
-						//"fields" : changes,
-						"ts" : timestamp
+						"fields" : changes,
+						// "ts" : timestamp -- This seems to give issues with a date in the past in Slack
 					}
 				]
 			};
