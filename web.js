@@ -91,11 +91,9 @@ app.get('/slackauth', jsonParser, function (req, res) {
 		
     	resOAuth.setEncoding( 'utf8' );
     	resOAuth.on('data', (d) => {
-    		console.log( d );
     		var data = JSON.parse(d);
-    		console.log ( data.ok );
     		if ( data.ok == false ) {
-    			var err = new Error("Error with Slack Response: " + d);
+    			console.log("Error with Slack Response: " + d);
     			return;
     		}
     		teamId = d.team_id;
@@ -103,16 +101,16 @@ app.get('/slackauth', jsonParser, function (req, res) {
     		channelId = d.incoming_webhook.channel_id;
     		channelName = d.incoming_webhook.channel_name;
     		webhookUrl = d.incoming_webhook.url;
-  		});
-  		
-  		// Save info to Database
-  		pg.connect( process.env.DATABASE_URL, function( err, client ) {
-  			if ( err ) throw err;
-  			console.log('Connected to DB');
-  			client.query('INSERT INTO slack_teams ( slack_team_id, slack_team_name) VALUES (' + 
-  				teamId + ',' + teamName + ')' );
-  			client.query('INSERT INTO slack_incoming_webhooks ( slack_channel_id, slack_channel_name, slack_team_id, slack_webhook_url ) VALUES (' +
-  				channelId + ',' + channelName + ',' + teamId + ',' + webhookUrl + ')' );
+
+	  		// Save info to Database
+  			pg.connect( process.env.DATABASE_URL, function( err, client ) {
+  				if ( err ) throw err;
+  				console.log('Connected to DB');
+  				client.query('INSERT INTO slack_teams ( slack_team_id, slack_team_name) VALUES (' + 
+  					teamId + ',' + teamName + ')' );
+  				client.query('INSERT INTO slack_incoming_webhooks ( slack_channel_id, slack_channel_name, slack_team_id, slack_webhook_url ) VALUES (' +
+  					channelId + ',' + channelName + ',' + teamId + ',' + webhookUrl + ')' );
+  			} );
   		} );
   	} );
 	
