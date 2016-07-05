@@ -64,7 +64,7 @@ app.get('/slackauth', jsonParser, function (req, res) {
 	var options = {
 	    hostname : 'slack.com' ,
 	    path  : '/api/oauth.access',
-	    method  : 'POST',
+	    method  : 'GET',
 	    headers : {
 	    	'Content-type' : 'application/json; charset=utf-8'
 	    }
