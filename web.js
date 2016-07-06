@@ -151,7 +151,7 @@ app.post('/slack/buttonaction', jsonParser, function (req, res) {
 	console.log('Slack Button Action starting...');
 	console.log( req );
 	console.log( '----------' );
-	console.log( req.payload );
+	console.log( req.query );
 	res.end();
 });
 
