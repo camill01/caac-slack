@@ -216,8 +216,9 @@ app.post('/slack/buttonaction', urlParser, function (req, res) {
 			var securityToken = '';
 			var req = https.request( options , res => {
     			res.on('data', (d) => {
-    				console.log('Errors: ' + d.OperationResult.Errors );
-    				securityToken = d.OperationResult.SecurityToken;
+    				var data = JSON.parse(d);
+    				console.log('Errors: ' + data.OperationResult.Errors );
+    				securityToken = data.OperationResult.SecurityToken;
     				console.log('Fetching Security Token Done.');
 
 					var updateJson = {};
