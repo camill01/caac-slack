@@ -17,9 +17,7 @@ console.log( "Initialized" );
 
 /* Test to process an incoming CAAC WebHook */
 app.post('/caacnotify', jsonParser, function (req, res) {
-	console.log( 'CAAC Callback starting...');
-	//console.log(req.body);
-	
+	console.log( 'CAAC Callback starting...');	
 	var action = req.body.message.action;
 	var name = req.body.message.state["500a0d67-9c48-4145-920c-821033e4a832"].value;
 	var displayColor = req.body.message.state["b0778de0-a927-11e2-9e96-0800200c9a66"].value;
@@ -43,6 +41,24 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 			if ( field == "Schedule State" ) {
 				old_value = req.body.message.changes[prop].old_value.name;
 				new_value = req.body.message.changes[prop].value.name;
+				
+				// Add some fun if the feature is accepted
+				if ( new_value == 'Accepted' ) {
+					var celebrations = [
+						':smiley:',
+						':smile:',
+						':upside_down_face:',
+						':sunglasses:',
+						':smiley_cat;',
+						':smile_cat:',
+						':clap:',
+						':balloon:',
+						':cake:'
+					];
+					for (int i = 0; i < 3; i ++ ) {
+						new_value = new_value + celebrations[Math.floor(Math.random() * messages.length)];
+					}
+				}
 			} else if ( field == "Plan Estimate" ) {
 				old_value = req.body.message.changes[prop].old_value;
 				if ( old_value !== null ) { old_value = old_value.value; }
@@ -87,10 +103,7 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 				method : 'POST'
 			};
 			
-			console.log( options );
-			
 			var payload = {
-			//	"text" : action + " <" + detailLink + "|" + formattedId + "> " + name,
 				"attachments" : [
 					{
 						"fallback" : action + " <" + detailLink + "|" + formattedId + "> " + name,
@@ -103,8 +116,6 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 					}
 				]
 			};
-			
-			console.log( payload );
 
 			var req = https.request( options , function (res , b , c) {
 				res.setEncoding( 'utf8' );
