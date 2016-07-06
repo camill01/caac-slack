@@ -9,9 +9,14 @@ var BLACKLISTED_FIELDS = [
 var express = require('express');
 var bodyParser = require('body-parser');
 var https = require('https');
+
 var pg = require('pg');
 pg.defaults.ssl = true;
+
 var app = express();
+app.use(express.json());       // to support JSON-encoded bodies
+app.use(express.urlencoded()); // to support URL-encoded bodies
+
 var jsonParser = bodyParser.json();
 
 /* Test to process an incoming CAAC WebHook */
@@ -150,8 +155,6 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 app.post('/slack/buttonaction', jsonParser, function (req, res) {
 	console.log('Slack Button Action starting...');
 	console.log( req );
-	console.log( '----------' );
-	console.log( req.query );
 	res.end();
 });
 
