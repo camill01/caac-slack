@@ -149,7 +149,8 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 /* Endpoint for Slack button interactivity */
 app.post('/slack/buttonaction', jsonParser, function (req, res) {
 	console.log('Slack Button Action starting...');
-	console.log( req.body );
+	console.log( req );
+	res.end();
 });
 
 /* Endpoint for Slack in the OAuth flow */
