@@ -236,6 +236,8 @@ app.post('/slack/buttonaction', urlParser, function (req, res) {
 		
 			// Making update to CAAC
 			console.log( 'Making update to CAAC...' );
+			console.log( options );
+			console.log( payload );
 			var req = https.request( options , resOAuth => {
 			} );
 
