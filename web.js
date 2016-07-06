@@ -189,56 +189,64 @@ app.post('/slack/buttonaction', urlParser, function (req, res) {
 	var caacProjectId = payload.actions[0].value.split('+')[0];
 	var caacUuid = payload.actions[0].value.split('+')[1];
 	
-	dbQuery = "SELECT caac_api_key FROM caac_slack WHERE slack_channel_id = '" + slackChannelId + "' AND caac_project_id = '" + caacProjectId + "';"; 
-  	client.query( dbQuery ).on('row', function (row) {
-  		var rowData = JSON.stringify(row);
-  		var apiKey = row.caac_api_key;
-  		
-  		var updateJson = {};
-  		switch( payload.actions[0].name ) {
-  			case 'assigntome':
-  				break;
-  			case 'movetodefined':
-  				updateJson.ScheduleState = 'Defined';
-  				break;
-  			case 'movetoinprogress':
-  				updateJson.ScheduleState = 'In-Progress';
-  				break;
-  			case 'movetocompleted':
-  				updateJson.ScheduleState = 'Completed';
-  				break;
-  			case 'movetoaccepted':
-  				updateJson.ScheduleState = 'Accepted';
-  				break;
-  			case 'movetoreleased':
-  				updateJson.ScheduleState = 'Released';
-  				break;
-  		}
-  		
-  		var options = {
-			hostname : 'rally1.rallydev.com' ,
-			path  : '/slm/webservice/v2.0/hierarchicalrequirement/' +
-					caacUuid +
-					'?key=' + 
-					apiKey,
-			method  : 'POST',
-			headers : {
-				'Content-type' : 'text/javascript; charset=utf-8'
-			}
-		};
+	pg.connect( process.env.DATABASE_URL, function( err, client ) {
+		if ( err ) {
+			console.log("Error with DB: " + err );
+			return;
+		}
+		console.log('Connected to DB');
+	
+		dbQuery = "SELECT caac_api_key FROM caac_slack WHERE slack_channel_id = '" + slackChannelId + "' AND caac_project_id = '" + caacProjectId + "';"; 
+		client.query( dbQuery ).on('row', function (row) {
+			var rowData = JSON.stringify(row);
+			var apiKey = row.caac_api_key;
 		
-		// Making update to CAAC
-		console.log( 'Making update to CAAC...' );
-		var req = https.request( options , resOAuth => {
-		} );
+			var updateJson = {};
+			switch( payload.actions[0].name ) {
+				case 'assigntome':
+					break;
+				case 'movetodefined':
+					updateJson.ScheduleState = 'Defined';
+					break;
+				case 'movetoinprogress':
+					updateJson.ScheduleState = 'In-Progress';
+					break;
+				case 'movetocompleted':
+					updateJson.ScheduleState = 'Completed';
+					break;
+				case 'movetoaccepted':
+					updateJson.ScheduleState = 'Accepted';
+					break;
+				case 'movetoreleased':
+					updateJson.ScheduleState = 'Released';
+					break;
+			}
+		
+			var options = {
+				hostname : 'rally1.rallydev.com' ,
+				path  : '/slm/webservice/v2.0/hierarchicalrequirement/' +
+						caacUuid +
+						'?key=' + 
+						apiKey,
+				method  : 'POST',
+				headers : {
+					'Content-type' : 'text/javascript; charset=utf-8'
+				}
+			};
+		
+			// Making update to CAAC
+			console.log( 'Making update to CAAC...' );
+			var req = https.request( options , resOAuth => {
+			} );
 
-		req.on( 'error' , function (e) {
-			console.log( 'problem with request: ' + e.message );
-		} );
+			req.on( 'error' , function (e) {
+				console.log( 'problem with request: ' + e.message );
+			} );
 
-		req.write( JSON.stringify( payload ) );
-		req.end();
-		res.end();
+			req.write( JSON.stringify( payload ) );
+			req.end();
+			res.end();
+		});
 	});
 });
 
