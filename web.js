@@ -55,7 +55,7 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 						':balloon:',
 						':cake:'
 					];
-					for (int i = 0; i < 3; i ++ ) {
+					for (var i = 0; i < 3; i ++ ) {
 						new_value = new_value + celebrations[Math.floor(Math.random() * messages.length)];
 					}
 				}
