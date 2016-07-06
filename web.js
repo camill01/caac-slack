@@ -109,6 +109,9 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 				method : 'POST'
 			};
 			
+			//Create data for action to move forward.
+			nextScheduleStateAction = null;
+			
 			var payload = {
 				"attachments" : [
 					{
@@ -126,7 +129,8 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 								"text" : "Assign to Me",
 								"type" : "button",
 								"value" : uuid
-							}
+							},
+							nextScheduleStateAction
 						]
 					}
 				]
