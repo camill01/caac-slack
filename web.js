@@ -204,7 +204,7 @@ app.post('/slack/buttonaction', urlParser, function (req, res) {
 			// Get WSAPI Security Token
 			var options = {
 				hostname : 'rally1.rallydev.com' ,
-				path  : 'slm/webservice/v2.0/security/authorize',
+				path  : '/slm/webservice/v2.0/security/authorize',
 				method  : 'GET',
 				auth : apiKey + ':',
 				headers : {
