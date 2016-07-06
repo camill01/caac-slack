@@ -49,7 +49,7 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 						':smile:',
 						':upside_down_face:',
 						':sunglasses:',
-						':smiley_cat;',
+						':smiley_cat:',
 						':smile_cat:',
 						':clap:',
 						':balloon:',
