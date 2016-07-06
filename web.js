@@ -216,66 +216,67 @@ app.post('/slack/buttonaction', urlParser, function (req, res) {
 			var securityToken = '';
 			var req = https.request( options , res => {
     			res.on('data', (d) => {
-    				console.log('Errors: ' + d.OperationResults.Errors );
+    				console.log('Errors: ' + d.OperationResult.Errors );
     				securityToken = d.OperationResult.SecurityToken;
-    			});
-			} );
-			req.end();
-			console.log('Fetching Security Token Done.');
-			
-			var updateJson = {};
-			switch( payload.actions[0].name ) {
-				case 'assigntome':
-					break;
-				case 'movetodefined':
-					updateJson.ScheduleState = 'Defined';
-					break;
-				case 'movetoinprogress':
-					updateJson.ScheduleState = 'In-Progress';
-					break;
-				case 'movetocompleted':
-					updateJson.ScheduleState = 'Completed';
-					break;
-				case 'movetoaccepted':
-					updateJson.ScheduleState = 'Accepted';
-					break;
-				case 'movetoreleased':
-					updateJson.ScheduleState = 'Released';
-					break;
-			}
+    				console.log('Fetching Security Token Done.');
+
+					var updateJson = {};
+					switch( payload.actions[0].name ) {
+						case 'assigntome':
+							break;
+						case 'movetodefined':
+							updateJson.ScheduleState = 'Defined';
+							break;
+						case 'movetoinprogress':
+							updateJson.ScheduleState = 'In-Progress';
+							break;
+						case 'movetocompleted':
+							updateJson.ScheduleState = 'Completed';
+							break;
+						case 'movetoaccepted':
+							updateJson.ScheduleState = 'Accepted';
+							break;
+						case 'movetoreleased':
+							updateJson.ScheduleState = 'Released';
+							break;
+					}
 		
-			var options = {
-				hostname : 'rally1.rallydev.com' ,
-				path  : '/slm/webservice/v2.0/hierarchicalrequirement/' +
-						caacUuid +
-						'?key=' + 
-						securityToken,
-				method  : 'POST',
-				headers : {
-					'Content-type' : 'text/javascript; charset=utf-8'
-				}
-			};
+					var options = {
+						hostname : 'rally1.rallydev.com' ,
+						path  : '/slm/webservice/v2.0/hierarchicalrequirement/' +
+								caacUuid +
+								'?key=' + 
+								securityToken,
+						method  : 'POST',
+						headers : {
+							'Content-type' : 'text/javascript; charset=utf-8'
+						}
+					};
 			
-			// Making update to CAAC
-			console.log( 'Making update to CAAC...' );
-			console.log( options );
-			console.log( updateJson );
+					// Making update to CAAC
+					console.log( 'Making update to CAAC...' );
+					console.log( options );
+					console.log( updateJson );
 			
-			var req = https.request( options , res => {
-				res.setEncoding( 'utf8' );
-    			res.on('data', (d) => {
-    				console.log( d.status_code );
-    				console.log( d.status_message );
+					var req = https.request( options , res => {
+						res.setEncoding( 'utf8' );
+						res.on('data', (d) => {
+							console.log( d.status_code );
+							console.log( d.status_message );
+						});
+					} );
+
+					req.on( 'error' , function (e) {
+						console.log( 'problem with request: ' + e.message );
+					} );
+
+					req.write( JSON.stringify( updateJson ) );
+					req.end();
+					res.end();
+    				
     			});
-			} );
-
-			req.on( 'error' , function (e) {
-				console.log( 'problem with request: ' + e.message );
-			} );
-
-			req.write( JSON.stringify( updateJson ) );
+			});
 			req.end();
-			res.end();
 		});
 	});
 });
