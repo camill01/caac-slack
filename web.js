@@ -25,6 +25,7 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 	var displayColor = req.body.message.state["b0778de0-a927-11e2-9e96-0800200c9a66"].value;
 	var formattedId = req.body.message.state["55c5512a-1518-4944-8597-3eb91875e8d1"].value;
 	var scheduleState = req.body.message.state["aad205e0-2fbe-11e4-8c21-0800200c9a66"].value.name;
+	var projectId = req.body.message.state['ae8ecc9f-b9a0-42a4-a6e3-c83d7f8a7070'].value.id;
 	//var scheduleStateIndex = req.body.message.state["aad205e0-2fbe-11e4-8c21-0800200c9a66"].value.order_index;
 	var detailLink = req.body.message.detail_link;
 	var username = req.body.message.transaction.user.username;
@@ -98,8 +99,6 @@ app.post('/caacnotify', jsonParser, function (req, res) {
   			console.log("Error with DB: " + err );
   			return;
   		}
-  		console.log('Connected to DB');
-  		console.log('Retrieving WebHook URL');
   		dbQuery = "SELECT slack_incoming_webhook FROM slack_incoming_webhooks WHERE slack_channel_id = 'C1N5XSP36';"; 
   		client.query( dbQuery ).on('row', function (row) {
   			var rowData = JSON.stringify(row);
@@ -116,7 +115,7 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 			if ( scheduleState != 'Released' ) {
 				nextScheduleStateAction = {};
 				nextScheduleStateAction.type = "button";
-				nextScheduleStateAction.value = uuid;
+				nextScheduleStateAction.value = projectId + '+' + uuid;
 				switch( scheduleState ) {
 					case 'Idea':
 						nextScheduleStateAction.name = "movetodefined";
@@ -157,7 +156,7 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 								"name" : "assigntome",
 								"text" : "Assign to Me",
 								"type" : "button",
-								"value" : uuid
+								"value" : projectId + '+' + uuid
 							},
 							nextScheduleStateAction
 						]
@@ -185,8 +184,24 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 /* Endpoint for Slack button interactivity */
 app.post('/slack/buttonaction', urlParser, function (req, res) {
 	console.log('Slack Button Action starting...');
-	console.log( req.body.payload );
-	res.end();
+	
+	var payload = JSON.parse( req.body.payload );
+	
+	// Fetch Slack Team
+	var slackChannelId = payload.channel.id;
+	var caacProjectId = payload.value.split('+')[0];
+	var caacUuid = payload.value.split('+')[1];
+	
+	dbQuery = "SELECT caac_api_key FROM caac_slack WHERE slack_channel_id = '" + slackChannelId + "' AND caac_project_id = '" + caacProjectId + ";"; 
+  	
+  	console.log(dbQuery);
+  	/*
+  	client.query( dbQuery ).on('row', function (row) {
+  		var rowData = JSON.stringify(row);
+  		var api_key = row.caac_api_key;
+  	*/	
+		res.end();
+	//});
 });
 
 /* Endpoint for Slack in the OAuth flow */
