@@ -200,7 +200,29 @@ app.post('/slack/buttonaction', urlParser, function (req, res) {
 		client.query( dbQuery ).on('row', function (row) {
 			var rowData = JSON.stringify(row);
 			var apiKey = row.caac_api_key;
-		
+			
+			// Get WSAPI Security Token
+			var options = {
+				hostname : 'rally1.rallydev.com' ,
+				path  : 'slm/webservice/v2.0/security/authorize',
+				method  : 'GET',
+				auth : apiKey + ':',
+				headers : {
+					'Content-type' : 'application/x-www-form-urlencoded; charset=utf-8'
+				}
+			};
+			
+			console.log('Fetching Security Token...');
+			var securityToken = '';
+			var req = https.request( options , res => {
+    			res.on('data', (d) => {
+    				console.log('Errors: ' + d.OperationResults.Errors );
+    				securityToken = d.OperationResult.SecurityToken;
+    			});
+			} );
+			req.end();
+			console.log('Fetching Security Token Done.');
+			
 			var updateJson = {};
 			switch( payload.actions[0].name ) {
 				case 'assigntome':
@@ -227,13 +249,13 @@ app.post('/slack/buttonaction', urlParser, function (req, res) {
 				path  : '/slm/webservice/v2.0/hierarchicalrequirement/' +
 						caacUuid +
 						'?key=' + 
-						apiKey,
+						securityToken,
 				method  : 'POST',
 				headers : {
 					'Content-type' : 'text/javascript; charset=utf-8'
 				}
 			};
-		
+			
 			// Making update to CAAC
 			console.log( 'Making update to CAAC...' );
 			console.log( options );
@@ -242,7 +264,8 @@ app.post('/slack/buttonaction', urlParser, function (req, res) {
 			var req = https.request( options , res => {
 				res.setEncoding( 'utf8' );
     			res.on('data', (d) => {
-    				console.log( res );
+    				console.log( d.status_code );
+    				console.log( d.status_message );
     			});
 			} );
 
