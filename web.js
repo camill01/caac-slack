@@ -24,6 +24,8 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 	var name = req.body.message.state["500a0d67-9c48-4145-920c-821033e4a832"].value;
 	var displayColor = req.body.message.state["b0778de0-a927-11e2-9e96-0800200c9a66"].value;
 	var formattedId = req.body.message.state["55c5512a-1518-4944-8597-3eb91875e8d1"].value;
+	var scheduleState = req.body.message.state["aad205e0-2fbe-11e4-8c21-0800200c9a66"].value.name;
+	//var scheduleStateIndex = req.body.message.state["aad205e0-2fbe-11e4-8c21-0800200c9a66"].value.order_index;
 	var detailLink = req.body.message.detail_link;
 	var username = req.body.message.transaction.user.username;
 	var userUuid = req.body.message.transaction.user.uuid;
@@ -111,7 +113,34 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 			
 			//Create data for action to move forward.
 			nextScheduleStateAction = null;
-			
+			if ( scheduleState != 'Released' ) {
+				nextScheduleStateAction = {};
+				nextScheduleStateAction.type = "button";
+				nextScheduleStateAction.value = uuid;
+				switch( scheduleState ) {
+					case 'Idea':
+						nextScheduleStateAction.name = "movetodefined";
+						nextScheduleStateAction.text = "Move to Defined";
+						break;
+					case 'Defined':
+						nextScheduleStateAction.name = "movetoinprogress";
+						nextScheduleStateAction.text = "Move to In Progress";
+						break;
+					case 'In-Progress':
+						nextScheduleStateAction.name = "movetocompleted";
+						nextScheduleStateAction.text = "Move to Completed";
+						break;
+					case 'Completed':
+						nextScheduleStateAction.name = "movetoaccepted";
+						nextScheduleStateAction.text = "Move to Accepted";
+						break;
+					case 'Accepted':
+						nextScheduleStateAction.name = "movetoreleased";
+						nextScheduleStateAction.text = "Move to Released";
+						break;
+				}
+			}
+						
 			var payload = {
 				"attachments" : [
 					{
@@ -156,7 +185,7 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 /* Endpoint for Slack button interactivity */
 app.post('/slack/buttonaction', urlParser, function (req, res) {
 	console.log('Slack Button Action starting...');
-	console.log( req );
+	console.log( req.body.payload );
 	res.end();
 });
 
