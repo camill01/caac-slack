@@ -185,7 +185,8 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 app.post('/slack/buttonaction', urlParser, function (req, res) {
 	console.log('Slack Button Action starting...');
 	
-	var payload = JSON.parse( req.body.payload );
+	//var payload = JSON.parse( req.body.payload );
+	var payload = req.body.payload;
 	
 	// Fetch Slack Team
 	var slackChannelId = payload.channel.id;
