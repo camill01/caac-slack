@@ -14,8 +14,6 @@ pg.defaults.ssl = true;
 var app = express();
 var jsonParser = bodyParser.json();
 
-console.log( "Initialized" );
-
 /* Test to process an incoming CAAC WebHook */
 app.post('/caacnotify', jsonParser, function (req, res) {
 	console.log( 'CAAC Callback starting...');	
@@ -35,8 +33,6 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 		if ( BLACKLISTED_FIELDS.indexOf( field ) == -1 ) {
 			var newChange = {};
 			newChange.title = req.body.message.changes[prop].display_name;
-			
-			console.log( req.body.message.changes[prop].value )
 			
 			var old_value = "";
 			var new_value = "";
@@ -119,6 +115,7 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 						"title" : formattedId + ": " + name,
 						"title_link" : detailLink,
 						"fields" : changes,
+						"callback_id" : "caac_notify",
 						// "ts" : timestamp -- This seems to give issues with a date in the past in Slack
 						"actions" : [
 							{
