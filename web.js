@@ -56,7 +56,7 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 						':cake:'
 					];
 					for (var i = 0; i < 3; i ++ ) {
-						new_value = new_value + celebrations[Math.floor(Math.random() * messages.length)];
+						new_value = new_value + celebrations[Math.floor(Math.random() * celebrations.length)];
 					}
 				}
 			} else if ( field == "Plan Estimate" ) {
