@@ -27,6 +27,7 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 	var username = req.body.message.transaction.user.username;
 	var userUuid = req.body.message.transaction.user.uuid;
 	var timestamp = req.body.message.transaction.timestamp;
+	var uuid = req.body.message.object_id;
 	
 	var changes = [];
 	for ( var prop in req.body.message.changes ) {
@@ -119,6 +120,14 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 						"title_link" : detailLink,
 						"fields" : changes,
 						// "ts" : timestamp -- This seems to give issues with a date in the past in Slack
+						"actions" : [
+							{
+								"name" : "assigntome",
+								"text" : "Assign to Me",
+								"type" : "button",
+								"value" : uuid
+							}
+						]
 					}
 				]
 			};
@@ -139,6 +148,12 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 		} );
   	} );
 });
+
+/* Endpoint for Slack button interactivity */
+app.post('/slack/buttonaction', jsonParser, function (req, res) {
+	console.log('Slack Button Action starting...');
+	console.log( req.body );
+};
 
 /* Endpoint for Slack in the OAuth flow */
 app.get('/slackauth', jsonParser, function (req, res) {
