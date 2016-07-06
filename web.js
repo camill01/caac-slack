@@ -263,8 +263,7 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 					var req = https.request( options , res => {
 						res.setEncoding( 'utf8' );
 						res.on('data', (d) => {
-							console.log( d.status_code );
-							console.log( d.status_message );
+							console.log( d );
 						});
 					} );
 
