@@ -185,13 +185,12 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 app.post('/slack/buttonaction', urlParser, function (req, res) {
 	console.log('Slack Button Action starting...');
 	
-	//var payload = JSON.parse( req.body.payload );
-	var payload = req.body.payload;
+	var payload = JSON.parse( req.body.payload );
 	
 	// Fetch Slack Team
 	var slackChannelId = payload.channel.id;
-	var caacProjectId = payload.value.split('+')[0];
-	var caacUuid = payload.value.split('+')[1];
+	var caacProjectId = payload.actions[0].value.split('+')[0];
+	var caacUuid = payload.actions[0].value.split('+')[1];
 	
 	dbQuery = "SELECT caac_api_key FROM caac_slack WHERE slack_channel_id = '" + slackChannelId + "' AND caac_project_id = '" + caacProjectId + ";"; 
   	
