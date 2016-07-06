@@ -179,7 +179,7 @@ app.post('/caacnotify', jsonParser, function (req, res) {
 });
 
 /* Endpoint for Slack button interactivity */
-app.post('/slack/buttonaction', urlParser, function (req, res) {
+app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 	console.log('Slack Button Action starting...');
 	
 	var payload = JSON.parse( req.body.payload );
@@ -274,8 +274,7 @@ app.post('/slack/buttonaction', urlParser, function (req, res) {
 
 					req.write( JSON.stringify( updateJson ) );
 					req.end();
-					res.end();
-    				
+					resSuper.end();
     			});
 			});
 			req.end();
