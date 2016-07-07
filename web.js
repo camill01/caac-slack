@@ -226,9 +226,7 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 			var options = {
 				hostname : 'rally1.rallydev.com' ,
 				path  : '/slm/webservice/v2.0/hierarchicalrequirement/' +
-						caacUuid +
-						'?key=' + 
-						securityToken,
+						caacUuid,
 				method  : 'POST',
 				headers : {
 					'Content-type' : 'text/javascript; charset=utf-8'
