@@ -88,7 +88,7 @@ pg.connect( process.env.DATABASE_URL, function( err, client ) {
 													"name" : "showdetails",
 													"text" : "Show Details",
 													"type" : "button",
-													"value" : projectId + '+' + uuid
+													"value" : uuid
 												},
 												nextScheduleStateAction
 											]
