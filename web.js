@@ -72,6 +72,7 @@ pg.connect( process.env.DATABASE_URL, function( err, client ) {
 								rtm.sendMessage('Did you mean <' + link + '|' + workItemId + ': ' + name + '>?', slackChannelId );
 							} else {
 								console.log( "Couldn't find " + workItemId + "." ); 
+							}
 						});
 					});
 				});
