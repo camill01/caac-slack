@@ -62,9 +62,13 @@ pg.connect( process.env.DATABASE_URL, function( err, client ) {
 					console.log(options);
 					var req = https.request( options , resOAuth => {
 						resOAuth.setEncoding( 'utf8' );
+						var data = '';
     					resOAuth.on('data', (d) => {
-    						console.log(d);
-    						var data = JSON.parse(d);
+    						data = data + d;
+    					});
+    					
+    					resOAuth.on('end', () => {
+    						var data = JSON.parse(data);
     						
     						if ( data.QueryResult.TotalResultCount > 0 ) {
 								var uuid = data.QueryResult.Results[0]._refObjectUUID;
