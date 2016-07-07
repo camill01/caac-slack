@@ -50,7 +50,7 @@ pg.connect( process.env.DATABASE_URL, function( err, client ) {
 					// Query WSAPI for artifact
 					var options = {
 						hostname : 'rally1.rallydev.com' ,
-						path  : '/slm/webservice/v2.0/artifact?query=(FormattedID%20%3D%20' + workItemId;
+						path  : '/slm/webservice/v2.0/artifact?query=(FormattedID%20%3D%20' + workItemId,
 						auth : apiKey + ':',
 						method  : 'GET',
 						headers : {
