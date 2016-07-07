@@ -42,7 +42,8 @@ pg.connect( process.env.DATABASE_URL, function( err, client ) {
   				var slackChannelId = message.channel;
   				
   				// Get the WSAPI API key
-  				dbQuery = "SELECT caac_api_key FROM caac_slack WHERE slack_channel_id = '" + slackChannelId + "' AND caac_project_id = '" + caacProjectId + "';"; 
+  				// TODO: How do we pick which API key to use if there are multiple projects?
+  				dbQuery = "SELECT caac_api_key FROM caac_slack WHERE slack_channel_id = '" + slackChannelId + "';"; 
 				client.query( dbQuery ).on('row', function (row) {
 					var rowData = JSON.stringify(row);
 					var apiKey = row.caac_api_key;
@@ -69,7 +70,8 @@ pg.connect( process.env.DATABASE_URL, function( err, client ) {
 								var name = data.QueryResult.Results[0]._refObjectName;
 							
 								rtm.sendMessage('Did you mean <' + link + '|' + workItemId + ': ' + name + '>?', slackChannelId );
-							}
+							} else {
+								console.log( "Couldn't find " + workItemId + "." ); 
 						});
 					});
 				});
