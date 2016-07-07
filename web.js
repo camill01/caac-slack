@@ -270,7 +270,7 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 			resSuper.setHeader('Content-Type', 'application/json; charset=utf-8');
 			originalMessage.attachments[0].actions = [];
 			originalMessage.attachments[0].fields.push( {
-				"title" : ":white_check_mark: " + slackUserName + " " + action + ".";
+				"title" : ":white_check_mark: " + slackUserName + " " + action + "."
 			} );
 			resSuper.send( JSON.stringify( originalMessage ) );
 		});
