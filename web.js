@@ -51,12 +51,12 @@ pg.connect( process.env.DATABASE_URL, function( err, client ) {
 					// Query WSAPI for artifact
 					var options = {
 						hostname : 'rally1.rallydev.com' ,
-						path  : '/slm/webservice/v2.0/artifact?query=(FormattedID\%\2\0\%\3\D\%\2\0' + workItemId,
+						path  : '/slm/webservice/v2.0/artifact?query=(FormattedID%20%3D%20' + workItemId + ')',
 						auth : apiKey + ':',
 						method  : 'GET'//,
-			//			headers : {
-			//				'Content-type' : 'application/x-www-form-urlencoded; charset=utf-8'
-			//			}
+						headers : {
+							'Content-type' : 'application/x-www-form-urlencoded; charset=utf-8'
+						}
 					};
 					console.log('Query WSAPI for ' + workItemId );
 					console.log(options);
