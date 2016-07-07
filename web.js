@@ -95,7 +95,7 @@ pg.connect( process.env.DATABASE_URL, function( err, client ) {
 									]
 								};
 								
-								rtm.sendMessage( message, slackChannelId );
+								rtm.sendMessage( JSON.stringify(message), slackChannelId );
 							} else {
 								console.log( "Couldn't find " + workItemId + "." ); 
 							}
