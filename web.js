@@ -260,13 +260,9 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 			req.write( JSON.stringify( updateJson ) );
 			req.end();
 			
-			console.log(originalMessage.attachments);
-			console.log('------');
-			console.log(originalMessage.attachments.fields);
-			
 			resSuper.setHeader('Content-Type', 'application/json; charset=utf-8');
-			originalMessage.attachments.actions = [];
-			originalMessage.attachments.fields.push( {
+			originalMessage.attachments[0].actions = [];
+			originalMessage.attachments[0].fields.push( {
 				"title" : "Updated!!!"
 			} );
 			resSuper.send( JSON.stringify( originalMessage ) );
