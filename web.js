@@ -33,6 +33,8 @@ pg.connect( process.env.DATABASE_URL, function( err, client ) {
   		var rtm = new RtmClient( token, {loglevel: 'debug'});
   		rtm.start();
   		
+  		var slackWebClient = new WebClient( token );
+  		
   		// Listen for messages to see if anyone references a work item
   		rtm.on(RTM_EVENTS.MESSAGE, function (message ) {
   			var pattern = /S\d*/;
@@ -59,7 +61,6 @@ pg.connect( process.env.DATABASE_URL, function( err, client ) {
 						}
 					};
 					console.log('Query WSAPI for ' + workItemId );
-					console.log(options);
 					var req = https.request( options , resOAuth => {
 						resOAuth.setEncoding( 'utf8' );
 						var data = '';
@@ -77,7 +78,6 @@ pg.connect( process.env.DATABASE_URL, function( err, client ) {
 								var name = data.QueryResult.Results[0]._refObjectName;
 								
 								var message = {
-									"text" : 'Hello!',
 									"attachments" : [
 										{
 											"fallback" : " <" + link + "|" + workItemId + ':' + name + ">",
@@ -96,7 +96,12 @@ pg.connect( process.env.DATABASE_URL, function( err, client ) {
 									]
 								};
 								
-								rtm.sendMessage( message, slackChannelId );
+								console.log( 'Calling Slack Web Client' );
+								slackWebClient.chat.postMessage( slackChannelId, '', message, (err, response) => {
+									console.log(err);
+									console.log(response);
+								});
+								//rtm.sendMessage( message, slackChannelId );
 							} else {
 								console.log( "Couldn't find " + workItemId + "." ); 
 							}
