@@ -189,6 +189,7 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 	var caacProjectId = payload.actions[0].value.split('+')[0];
 	var caacUuid = payload.actions[0].value.split('+')[1];
 	var responseUrl = payload.response_url;
+	var originalMessage = payload.originalMessage;
 	var slackToken = payload.token;
 	
 	// Confirm this call is coming from Slack
@@ -238,7 +239,7 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 						caacUuid,
 				method  : 'POST',
 				headers : {
-					'Content-type' : 'text/javascript; charset=utf-8'
+					'Content-type' : 'text/json; charset=utf-8'
 				},
 				auth : apiKey + ':'
 			};
@@ -259,8 +260,12 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 			req.write( JSON.stringify( updateJson ) );
 			req.end();
 			
-			resSuper.setHeader('Content-Type', 'application/json');
-			resSuper.send(JSON.stringify({ "text": "Hello!" }));
+			resSuper.setHeader('Content-Type', 'application/json; charset=utf-8');
+			originalMessage.attachments.actions = [];
+			originalMessage.attachments.fields.push( {
+				"title" : "Updated!!!"
+			};
+			resSuper.send( JSON.stringify( originalMessage ) );
 		});
 	});
 });
