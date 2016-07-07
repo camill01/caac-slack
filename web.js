@@ -188,7 +188,14 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 	var slackChannelId = payload.channel.id;
 	var caacProjectId = payload.actions[0].value.split('+')[0];
 	var caacUuid = payload.actions[0].value.split('+')[1];
+	var slackToken = payload.token;
 	
+	// Confirm this call is coming from Slack
+	if ( slackToken == null || slackToken != process.env.SLACK_VERIFICATION_TOKEN ) {
+		console.log("This call does not seem to be coming from Slack");
+		return;
+	}
+		
 	pg.connect( process.env.DATABASE_URL, function( err, client ) {
 		if ( err ) {
 			console.log("Error with DB: " + err );
@@ -236,13 +243,10 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 	
 			// Making update to CAAC
 			console.log( 'Making update to CAAC...' );
-			console.log( options );
-			console.log( updateJson );
-	
 			var req = https.request( options , res => {
 				res.setEncoding( 'utf8' );
 				res.on('data', (d) => {
-					console.log( d );
+				//	console.log( d );
 				});
 			} );
 
@@ -255,7 +259,6 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 			resSuper.end();
 		});
 	});
-	req.end();
 });
 
 /* Endpoint for Slack in the OAuth flow */
