@@ -190,6 +190,7 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 	var caacUuid = payload.actions[0].value.split('+')[1];
 	var responseUrl = payload.response_url;
 	var originalMessage = payload.original_message;
+	var slackUserName = payload.user.name;
 	var slackToken = payload.token;
 	
 	// Confirm this call is coming from Slack
@@ -211,6 +212,7 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 			var rowData = JSON.stringify(row);
 			var apiKey = row.caac_api_key;
 			
+			var actionText = '';
 			var updateJson = {};
 			updateJson.HierarchicalRequirement = {};
 			switch( payload.actions[0].name ) {
@@ -218,18 +220,23 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 					break;
 				case 'movetodefined':
 					updateJson.HierarchicalRequirement.ScheduleState = 'Defined';
+					actionText = 'moved to Defined';
 					break;
 				case 'movetoinprogress':
 					updateJson.HierarchicalRequirement.ScheduleState = 'In-Progress';
+					actionText = 'moved to In Progress';
 					break;
 				case 'movetocompleted':
 					updateJson.HierarchicalRequirement.ScheduleState = 'Completed';
+					actionText = 'moved to Completed';
 					break;
 				case 'movetoaccepted':
 					updateJson.HierarchicalRequirement.ScheduleState = 'Accepted';
+					actionText = 'moved to Accepted';
 					break;
 				case 'movetoreleased':
 					updateJson.HierarchicalRequirement.ScheduleState = 'Released';
+					actionText = 'moved to Released';
 					break;
 			}
 
@@ -263,7 +270,7 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 			resSuper.setHeader('Content-Type', 'application/json; charset=utf-8');
 			originalMessage.attachments[0].actions = [];
 			originalMessage.attachments[0].fields.push( {
-				"title" : "Updated!!!"
+				"title" : ":white_check_mark: " + slackUserName + " " + action + ".";
 			} );
 			resSuper.send( JSON.stringify( originalMessage ) );
 		});
