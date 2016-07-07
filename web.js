@@ -75,8 +75,28 @@ pg.connect( process.env.DATABASE_URL, function( err, client ) {
 								var uuid = data.QueryResult.Results[0]._refObjectUUID;
 								var link = data.QueryResult.Results[0]._ref;
 								var name = data.QueryResult.Results[0]._refObjectName;
-							
-								rtm.sendMessage('Did you mean <' + link + '|' + workItemId + ': ' + name + '>?', slackChannelId );
+								
+								var message = {
+									"attachments" : [
+										{
+											"fallback" : " <" + link + "|" + workItemId + ':' + name + ">",
+											"color" : 'black',
+											"title" : workItemId + ": " + name,
+											"title_link" : link,
+											"actions" : [
+												{
+													"name" : "showdetails",
+													"text" : "Show Details",
+													"type" : "button",
+													"value" : projectId + '+' + uuid
+												},
+												nextScheduleStateAction
+											]
+										}
+									]
+								};
+								
+								rtm.sendMessage( message, slackChannelId );
 							} else {
 								console.log( "Couldn't find " + workItemId + "." ); 
 							}
