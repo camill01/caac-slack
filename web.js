@@ -201,83 +201,64 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 			var rowData = JSON.stringify(row);
 			var apiKey = row.caac_api_key;
 			
-			// Get WSAPI Security Token
+			var updateJson = {};
+			updateJson.HierarchicalRequirement = {};
+			switch( payload.actions[0].name ) {
+				case 'assigntome':
+					break;
+				case 'movetodefined':
+					updateJson.HierarchicalRequirement.ScheduleState = 'Defined';
+					break;
+				case 'movetoinprogress':
+					updateJson.HierarchicalRequirement.ScheduleState = 'In-Progress';
+					break;
+				case 'movetocompleted':
+					updateJson.HierarchicalRequirement.ScheduleState = 'Completed';
+					break;
+				case 'movetoaccepted':
+					updateJson.HierarchicalRequirement.ScheduleState = 'Accepted';
+					break;
+				case 'movetoreleased':
+					updateJson.HierarchicalRequirement.ScheduleState = 'Released';
+					break;
+			}
+
 			var options = {
 				hostname : 'rally1.rallydev.com' ,
-				path  : '/slm/webservice/v2.0/security/authorize',
-				method  : 'GET',
-				auth : apiKey + ':',
+				path  : '/slm/webservice/v2.0/hierarchicalrequirement/' +
+						caacUuid +
+						'?key=' + 
+						securityToken,
+				method  : 'POST',
 				headers : {
-					'Content-type' : 'application/x-www-form-urlencoded; charset=utf-8'
-				}
+					'Content-type' : 'text/javascript; charset=utf-8'
+				},
+				auth : apiKey + ':'
 			};
-			
-			console.log('Fetching Security Token...');
-			var securityToken = '';
+	
+			// Making update to CAAC
+			console.log( 'Making update to CAAC...' );
+			console.log( options );
+			console.log( updateJson );
+	
 			var req = https.request( options , res => {
-    			res.on('data', (d) => {
-    				console.log(d);
-    				var data = JSON.parse(d);
-    				console.log('Errors: ' + data.OperationResult.Errors );
-    				securityToken = data.OperationResult.SecurityToken;
-    				console.log('Fetching Security Token Done.');
+				res.setEncoding( 'utf8' );
+				res.on('data', (d) => {
+					console.log( d );
+				});
+			} );
 
-					var updateJson = {};
-					switch( payload.actions[0].name ) {
-						case 'assigntome':
-							break;
-						case 'movetodefined':
-							updateJson.ScheduleState = 'Defined';
-							break;
-						case 'movetoinprogress':
-							updateJson.ScheduleState = 'In-Progress';
-							break;
-						case 'movetocompleted':
-							updateJson.ScheduleState = 'Completed';
-							break;
-						case 'movetoaccepted':
-							updateJson.ScheduleState = 'Accepted';
-							break;
-						case 'movetoreleased':
-							updateJson.ScheduleState = 'Released';
-							break;
-					}
-		
-					var options = {
-						hostname : 'rally1.rallydev.com' ,
-						path  : '/slm/webservice/v2.0/hierarchicalrequirement/' +
-								caacUuid +
-								'?key=' + 
-								securityToken,
-						method  : 'POST',
-						headers : {
-							'Content-type' : 'text/javascript; charset=utf-8'
-						}
-					};
-			
-					// Making update to CAAC
-					console.log( 'Making update to CAAC...' );
-					console.log( options );
-					console.log( updateJson );
-			
-					var req = https.request( options , res => {
-						res.setEncoding( 'utf8' );
-						res.on('data', (d) => {
-							console.log( d );
-						});
-					} );
+			req.on( 'error' , function (e) {
+				console.log( 'problem with request: ' + e.message );
+			} );
 
-					req.on( 'error' , function (e) {
-						console.log( 'problem with request: ' + e.message );
-					} );
-
-					req.write( JSON.stringify( updateJson ) );
-					req.end();
-					resSuper.end();
-    			});
-			});
+			req.write( JSON.stringify( updateJson ) );
 			req.end();
+			resSuper.end();
 		});
+	});
+	req.end();
+});
 	});
 });
 
@@ -360,3 +341,25 @@ var port = process.env.PORT || 5000;
 app.listen(port, function() {
 	console.log( "Listening on " + port);
 });
+
+
+	/*	// Get WSAPI Security Token
+			var options = {
+				hostname : 'rally1.rallydev.com' ,
+				path  : '/slm/webservice/v2.0/security/authorize',
+				method  : 'GET',
+				auth : apiKey + ':',
+				headers : {
+					'Content-type' : 'application/x-www-form-urlencoded; charset=utf-8'
+				}
+			};
+			
+			console.log('Fetching Security Token...');
+			var securityToken = '';
+			var req = https.request( options , res => {
+    			res.on('data', (d) => {
+    				console.log(d);
+    				var data = JSON.parse(d);
+    				console.log('Errors: ' + data.OperationResult.Errors );
+    				securityToken = data.OperationResult.SecurityToken;
+    				console.log('Fetching Security Token Done.'); */
