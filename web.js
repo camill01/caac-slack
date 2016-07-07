@@ -32,8 +32,14 @@ pg.connect( process.env.DATABASE_URL, function( err, client ) {
   		
   		var rtm = new RtmClient( token, {loglevel: 'debug'});
   		rtm.start();
+  		
+  		// Listen for messages to see if anyone references a work item
   		rtm.on(RTM_EVENTS.MESSAGE, function (message ) {
-  			console.log(message);
+  			var pattern = new RegExp('S\d+?[\s$]', 'i');
+  			var workItemId = pattern.exec( messgae.text );
+  			if (workItemId !== null ) {
+  				console.log( workItemId );
+  			}
   		});
   	});
 });
