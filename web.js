@@ -19,6 +19,7 @@ var urlParser = bodyParser.urlencoded();
 
 // Set up RTM Client
 var RtmClient = require( '@slack/client' ).RtmClient;
+var WebClient = require( '@slack/client' ).WebClient;
 var RTM_EVENTS = require( '@slack/client' ).RTM_EVENTS;
 pg.connect( process.env.DATABASE_URL, function( err, client ) {
   	if ( err ) {
