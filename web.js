@@ -188,11 +188,13 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 	var slackChannelId = payload.channel.id;
 	var caacProjectId = payload.actions[0].value.split('+')[0];
 	var caacUuid = payload.actions[0].value.split('+')[1];
+	var responseUrl = payload.response_url;
 	var slackToken = payload.token;
 	
 	// Confirm this call is coming from Slack
 	if ( slackToken == null || slackToken != process.env.SLACK_VERIFICATION_TOKEN ) {
 		console.log("This call does not seem to be coming from Slack");
+		resSuper.status(403).end();
 		return;
 	}
 		
@@ -256,7 +258,9 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 
 			req.write( JSON.stringify( updateJson ) );
 			req.end();
-			resSuper.end();
+			
+			resSuper.setHeader('Content-Type', 'application/json');
+			resSuper.send(JSON.stringify({ "text": "Hello!" }));
 		});
 	});
 });
