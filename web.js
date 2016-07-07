@@ -39,7 +39,7 @@ pg.connect( process.env.DATABASE_URL, function( err, client ) {
   			var workItemId = pattern.exec( message.text );
   			if (workItemId !== null ) {
   				workItemId = workItemId[0];
-  				var channel = message.channel;
+  				var slackChannelId = message.channel;
   				
   				// Get the WSAPI API key
   				dbQuery = "SELECT caac_api_key FROM caac_slack WHERE slack_channel_id = '" + slackChannelId + "' AND caac_project_id = '" + caacProjectId + "';"; 
@@ -68,7 +68,7 @@ pg.connect( process.env.DATABASE_URL, function( err, client ) {
 								var link = data.QueryResult.Results[0]._ref;
 								var name = data.QueryResult.Results[0]._refObjectName;
 							
-								rtm.sendMessage('Did you mean <' + link + '|' + workItemId + ': ' + name + '>?', channel );
+								rtm.sendMessage('Did you mean <' + link + '|' + workItemId + ': ' + name + '>?', slackChannelId );
 							}
 						});
 					});
