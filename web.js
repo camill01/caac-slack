@@ -53,7 +53,7 @@ pg.connect( process.env.DATABASE_URL, function( err, client ) {
 						hostname : 'rally1.rallydev.com' ,
 						path  : '/slm/webservice/v2.0/artifact?query=(FormattedID%20%3D%20' + workItemId + ')',
 						auth : apiKey + ':',
-						method  : 'GET'//,
+						method  : 'GET',
 						headers : {
 							'Content-type' : 'application/x-www-form-urlencoded; charset=utf-8'
 						}
