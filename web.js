@@ -89,8 +89,7 @@ pg.connect( process.env.DATABASE_URL, function( err, client ) {
 													"text" : "Show Details",
 													"type" : "button",
 													"value" : uuid
-												},
-												nextScheduleStateAction
+												}
 											]
 										}
 									]
