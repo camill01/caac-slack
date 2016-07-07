@@ -77,6 +77,7 @@ pg.connect( process.env.DATABASE_URL, function( err, client ) {
 							}
 						});
 					});
+					req.end();
 				});
 			}
 		});
