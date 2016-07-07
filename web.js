@@ -17,6 +17,10 @@ var app = express();
 var jsonParser = bodyParser.json();
 var urlParser = bodyParser.urlencoded();
 
+// Set up RTM Client
+var RtmClient = require( '@slack/client' ).RtmClient;
+var slackToken = process.env
+
 /* Test to process an incoming CAAC WebHook */
 app.post('/caacnotify', jsonParser, function (req, res) {
 	console.log( 'CAAC Callback starting...');	
@@ -311,6 +315,7 @@ app.get('/slackauth', jsonParser, function (req, res) {
 		
     	resOAuth.setEncoding( 'utf8' );
     	resOAuth.on('data', (d) => {
+    		console.log(d);
     		var data = JSON.parse(d);
     		if ( data.ok == false ) {
     			console.log("Error with Slack Response: " + d);
@@ -356,25 +361,3 @@ var port = process.env.PORT || 5000;
 app.listen(port, function() {
 	console.log( "Listening on " + port);
 });
-
-
-	/*	// Get WSAPI Security Token
-			var options = {
-				hostname : 'rally1.rallydev.com' ,
-				path  : '/slm/webservice/v2.0/security/authorize',
-				method  : 'GET',
-				auth : apiKey + ':',
-				headers : {
-					'Content-type' : 'application/x-www-form-urlencoded; charset=utf-8'
-				}
-			};
-			
-			console.log('Fetching Security Token...');
-			var securityToken = '';
-			var req = https.request( options , res => {
-    			res.on('data', (d) => {
-    				console.log(d);
-    				var data = JSON.parse(d);
-    				console.log('Errors: ' + data.OperationResult.Errors );
-    				securityToken = data.OperationResult.SecurityToken;
-    				console.log('Fetching Security Token Done.'); */

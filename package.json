@@ -3,6 +3,7 @@
   "main": "web.js",
   "version": "0.0.0",
   "dependencies": {
+    "@slack/client": "^3.5.1",
     "body-parser": "~1.15.1",
     "express": "~4.13.4",
     "https": "^1.0.0",
