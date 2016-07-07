@@ -189,7 +189,7 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 	var caacProjectId = payload.actions[0].value.split('+')[0];
 	var caacUuid = payload.actions[0].value.split('+')[1];
 	var responseUrl = payload.response_url;
-	var originalMessage = payload.originalMessage;
+	var originalMessage = payload.original_message;
 	var slackToken = payload.token;
 	
 	// Confirm this call is coming from Slack
