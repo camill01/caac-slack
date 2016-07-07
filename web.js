@@ -58,6 +58,8 @@ pg.connect( process.env.DATABASE_URL, function( err, client ) {
 							'Content-type' : 'application/x-www-form-urlencoded; charset=utf-8'
 						}
 					};
+					console.log('Query WSAPI for ' + workItemId );
+					console.log(options);
 					var req = https.request( options , resOAuth => {
 						resOAuth.setEncoding( 'utf8' );
     					resOAuth.on('data', (d) => {
