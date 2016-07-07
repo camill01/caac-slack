@@ -261,6 +261,8 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 			req.end();
 			
 			console.log(originalMessage.attachments);
+			console.log('------');
+			console.log(originalMessage.attachments.fields);
 			
 			resSuper.setHeader('Content-Type', 'application/json; charset=utf-8');
 			originalMessage.attachments.actions = [];
