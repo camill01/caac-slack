@@ -77,6 +77,7 @@ pg.connect( process.env.DATABASE_URL, function( err, client ) {
 								var name = data.QueryResult.Results[0]._refObjectName;
 								
 								var message = {
+									"text" : 'Hello!',
 									"attachments" : [
 										{
 											"fallback" : " <" + link + "|" + workItemId + ':' + name + ">",
@@ -95,7 +96,7 @@ pg.connect( process.env.DATABASE_URL, function( err, client ) {
 									]
 								};
 								
-								rtm.sendMessage( JSON.stringify(message), slackChannelId );
+								rtm.sendMessage( message, slackChannelId );
 							} else {
 								console.log( "Couldn't find " + workItemId + "." ); 
 							}
