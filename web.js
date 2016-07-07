@@ -19,7 +19,24 @@ var urlParser = bodyParser.urlencoded();
 
 // Set up RTM Client
 var RtmClient = require( '@slack/client' ).RtmClient;
-var slackToken = process.env
+var RTM_EVENTS = require( '@slack/client' ).RTM_EVENTS;
+pg.connect( process.env.DATABASE_URL, function( err, client ) {
+  	if ( err ) {
+  		console.log("Error with DB: " + err );
+  		return;
+  	}
+  	dbQuery = "SELECT bot_access_token FROM slack_teams WHERE slack_team_id = 'T1N5XSJVA';"; 
+  	client.query( dbQuery ).on('row', function (row) {
+  		var rowData = JSON.stringify(row);
+  		var token = row.bot_access_token;
+  		
+  		var rtm = new RtmClient( token, {loglevel: 'debug'});
+  		rtm.start();
+  		rtm.on(RTM_EVENTS.MESSAGE, function (message ) {
+  			console.log(message);
+  		});
+  	});
+});
 
 /* Test to process an incoming CAAC WebHook */
 app.post('/caacnotify', jsonParser, function (req, res) {
