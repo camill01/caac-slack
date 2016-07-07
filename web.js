@@ -37,8 +37,9 @@ pg.connect( process.env.DATABASE_URL, function( err, client ) {
   		rtm.on(RTM_EVENTS.MESSAGE, function (message ) {
   			console.log(message.text);
   			var pattern = /S\d+?[\s$]/;
-  			var workItemId = pattern.exec( message.text ).trim();
+  			var workItemId = pattern.exec( message.text );
   			if (workItemId !== null ) {
+  				workItemId = workItemId.trim();
   				console.log( workItemId );
   			}
   		});
