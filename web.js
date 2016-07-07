@@ -36,10 +36,9 @@ pg.connect( process.env.DATABASE_URL, function( err, client ) {
   		// Listen for messages to see if anyone references a work item
   		rtm.on(RTM_EVENTS.MESSAGE, function (message ) {
   			console.log(message.text);
-  			var pattern = /S\d+?[\s$]/;
+  			var pattern = /S\d\d\d\d\d\d*?/;
   			var workItemId = pattern.exec( message.text );
   			if (workItemId !== null ) {
-  				workItemId = workItemId.trim();
   				console.log( workItemId );
   			}
   		});
