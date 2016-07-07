@@ -264,7 +264,7 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 			originalMessage.attachments.actions = [];
 			originalMessage.attachments.fields.push( {
 				"title" : "Updated!!!"
-			};
+			} );
 			resSuper.send( JSON.stringify( originalMessage ) );
 		});
 	});
