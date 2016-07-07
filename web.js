@@ -259,8 +259,6 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 	});
 	req.end();
 });
-	});
-});
 
 /* Endpoint for Slack in the OAuth flow */
 app.get('/slackauth', jsonParser, function (req, res) {
