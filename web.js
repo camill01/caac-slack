@@ -35,13 +35,46 @@ pg.connect( process.env.DATABASE_URL, function( err, client ) {
   		
   		// Listen for messages to see if anyone references a work item
   		rtm.on(RTM_EVENTS.MESSAGE, function (message ) {
-  			console.log(message.text);
-  			var pattern = /S\d\d\d\d\d\d*?/;
+  			var pattern = /S\d*?/;
   			var workItemId = pattern.exec( message.text );
   			if (workItemId !== null ) {
-  				console.log( workItemId );
-  			}
-  		});
+  				workItemId = workItemId[0];
+  				var channel = message.channel;
+  				
+  				// Get the WSAPI API key
+  				dbQuery = "SELECT caac_api_key FROM caac_slack WHERE slack_channel_id = '" + slackChannelId + "' AND caac_project_id = '" + caacProjectId + "';"; 
+				client.query( dbQuery ).on('row', function (row) {
+					var rowData = JSON.stringify(row);
+					var apiKey = row.caac_api_key;
+					
+					// Query WSAPI for artifact
+					var options = {
+						hostname : 'rally1.rallydev.com' ,
+						path  : '/slm/webservice/v2.0/artifact?query=(FormattedID%20%3D%20' + workItemId;
+						auth : apiKey + ':',
+						method  : 'GET',
+						headers : {
+							'Content-type' : 'application/x-www-form-urlencoded; charset=utf-8'
+						}
+					};
+					var req = https.request( options , resOAuth => {
+						resOAuth.setEncoding( 'utf8' );
+    					resOAuth.on('data', (d) => {
+    						console.log(d);
+    						var data = JSON.parse(d);
+    						
+    						if ( data.QueryResult.TotalResultCount > 0 ) {
+								var uuid = data.QueryResult.Results[0]._refObjectUUID;
+								var link = data.QueryResult.Results[0]._ref;
+								var name = data.QueryResult.Results[0]._refObjectName;
+							
+								rtm.sendMessage('Did you mean <' + link + '|' + workItemId + ': ' + name + '>?', channel );
+							}
+						});
+					});
+				});
+			}
+		});
   	});
 });
 
