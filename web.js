@@ -367,6 +367,10 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 					];
 					resSuper.send( JSON.stringify( originalMessage ) );
 				} );
+				
+				req.on( 'error' , function (e) {
+   					console.log( 'problem with request: ' + e.message );
+				} );
 			} else {
 				switch( payload.actions[0].name ) {
 					case 'assigntome':
