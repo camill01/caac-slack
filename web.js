@@ -333,16 +333,16 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 				
 				console.log( options );
 				
-				var req = https.request( options , resOAuth => {
-					resOAuth.setEncoding( 'utf8' );
+				var reqDetails = https.request( options , resDetails => {
+					resDetails.setEncoding( 'utf8' );
 					var data = '';
 					
-					resOAuth.on('data', (d) => {
+					resDetails.on('data', (d) => {
 						console.log( d );
 						data = data + d;
 					});
 					
-					resOAuth.on('end', () => {
+					resDetails.on('end', () => {
 						data = JSON.parse(data);
 						var displayColor = data.HierarchicalRequirement.DisplayColor;
 						var scheduleState = data.HierarchicalRequirement.ScheduleState;
@@ -368,7 +368,7 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 					resSuper.send( JSON.stringify( originalMessage ) );
 				} );
 				
-				req.on( 'error' , function (e) {
+				reqDetails.on( 'error' , function (e) {
    					console.log( 'problem with request: ' + e.message );
 				} );
 			} else {
