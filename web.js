@@ -396,7 +396,7 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 							}
 						}
 						
-						originalMessage.attachements[0].actions = [
+						originalMessage.attachments[0].actions = [
 							{
 								"name" : "assigntome",
 								"text" : "Assign to Me",
