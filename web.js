@@ -368,6 +368,7 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 						
 						console.log("Sending Results");
 						console.log( originalMessage );
+						resSuper.setHeader('Content-Type', 'application/json; charset=utf-8');
 						resSuper.send( JSON.stringify( originalMessage ) );
 					});
 				} );
