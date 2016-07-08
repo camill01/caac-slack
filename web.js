@@ -307,6 +307,7 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 		console.log('Connected to DB');
 	
 		dbQuery = "SELECT caac_api_key FROM caac_slack WHERE slack_channel_id = '" + slackChannelId + "' AND caac_project_id = '" + caacProjectId + "';"; 
+		console.log( dbQuery );
 		client.query( dbQuery ).on('row', function (row) {
 			var rowData = JSON.stringify(row);
 			var apiKey = row.caac_api_key;
