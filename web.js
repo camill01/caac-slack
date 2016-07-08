@@ -366,6 +366,46 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 							}
 						];
 						
+						//Create data for action to move forward.
+						nextScheduleStateAction = null;
+						if ( scheduleState != 'Released' ) {
+							nextScheduleStateAction = {};
+							nextScheduleStateAction.type = "button";
+							nextScheduleStateAction.value = projectId + '+' + uuid;
+							switch( scheduleState ) {
+								case 'Idea':
+									nextScheduleStateAction.name = "movetodefined";
+									nextScheduleStateAction.text = "Move to Defined";
+									break;
+								case 'Defined':
+									nextScheduleStateAction.name = "movetoinprogress";
+									nextScheduleStateAction.text = "Move to In Progress";
+									break;
+								case 'In-Progress':
+									nextScheduleStateAction.name = "movetocompleted";
+									nextScheduleStateAction.text = "Move to Completed";
+									break;
+								case 'Completed':
+									nextScheduleStateAction.name = "movetoaccepted";
+									nextScheduleStateAction.text = "Move to Accepted";
+									break;
+								case 'Accepted':
+									nextScheduleStateAction.name = "movetoreleased";
+									nextScheduleStateAction.text = "Move to Released";
+									break;
+							}
+						}
+						
+						originalMessage.attachements[0].actions = [
+							{
+								"name" : "assigntome",
+								"text" : "Assign to Me",
+								"type" : "button",
+								"value" : projectId + '+' + uuid
+							},
+							nextScheduleStateAction
+						];
+						
 						console.log("Sending Results");
 						console.log( originalMessage );
 						resSuper.setHeader('Content-Type', 'application/json; charset=utf-8');
