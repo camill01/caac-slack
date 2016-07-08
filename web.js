@@ -91,7 +91,7 @@ pg.connect( process.env.DATABASE_URL, function( err, client ) {
 													"name" : "showdetails",
 													"text" : "Show Details",
 													"type" : "button",
-													"value" : uuid
+													"value" : uuid + 'b7913f8d-d85d-4d75-8dc3-7b27776e1633'
 												}
 											]
 										}
@@ -314,64 +314,112 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 			var actionText = '';
 			var updateJson = {};
 			updateJson.HierarchicalRequirement = {};
-			switch( payload.actions[0].name ) {
-				case 'assigntome':
-					break;
-				case 'movetodefined':
-					updateJson.HierarchicalRequirement.ScheduleState = 'Defined';
-					actionText = 'moved to Defined';
-					break;
-				case 'movetoinprogress':
-					updateJson.HierarchicalRequirement.ScheduleState = 'In-Progress';
-					actionText = 'moved to In Progress';
-					break;
-				case 'movetocompleted':
-					updateJson.HierarchicalRequirement.ScheduleState = 'Completed';
-					actionText = 'moved to Completed';
-					break;
-				case 'movetoaccepted':
-					updateJson.HierarchicalRequirement.ScheduleState = 'Accepted';
-					actionText = 'moved to Accepted';
-					break;
-				case 'movetoreleased':
-					updateJson.HierarchicalRequirement.ScheduleState = 'Released';
-					actionText = 'moved to Released';
-					break;
-			}
-
-			var options = {
-				hostname : 'rally1.rallydev.com' ,
-				path  : '/slm/webservice/v2.0/hierarchicalrequirement/' +
-						caacUuid,
-				method  : 'POST',
-				headers : {
-					'Content-type' : 'text/json; charset=utf-8'
-				},
-				auth : apiKey + ':'
-			};
-	
-			// Making update to CAAC
-			console.log( 'Making update to CAAC...' );
-			var req = https.request( options , res => {
-				res.setEncoding( 'utf8' );
-				res.on('data', (d) => {
-				//	console.log( d );
-				});
-			} );
-
-			req.on( 'error' , function (e) {
-				console.log( 'problem with request: ' + e.message );
-			} );
-
-			req.write( JSON.stringify( updateJson ) );
-			req.end();
 			
-			resSuper.setHeader('Content-Type', 'application/json; charset=utf-8');
-			originalMessage.attachments[0].actions = [];
-			originalMessage.attachments[0].fields.push( {
-				"title" : ":white_check_mark: " + slackUserName + " " + actionText + "."
-			} );
-			resSuper.send( JSON.stringify( originalMessage ) );
+			if ( payload.actions[0].name == 'showdetails' ) {
+				// Query WSAPI for artifact
+				var options = {
+					hostname : 'rally1.rallydev.com' ,
+					path  : '/slm/webservice/v2.0/hierarchicalRequirement/' + caacUuid,
+					auth : apiKey + ':',
+					method  : 'GET',
+					headers : {
+						'Content-type' : 'application/x-www-form-urlencoded; charset=utf-8'
+					}
+				};
+				console.log('Query WSAPI for ' + workItemId );
+				var req = https.request( options , resOAuth => {
+					resOAuth.setEncoding( 'utf8' );
+					var data = '';
+					
+					resOAuth.on('data', (d) => {
+						data = data + d;
+					});
+					
+					resOAuth.on('end', () => {
+						data = JSON.parse(data);
+						var displayColor = data.HierarchicalRequirement.DisplayColor;
+						var scheduleState = data.HierarchicalRequirement.ScheduleState;
+						var owner = data.HierarchicalRequirement.Owner._refObjectName;
+						var planEstimate = data.HierarchicalRequirement.PlanEstimate;
+					});
+					
+					originalMessage.attachments[0].color = displayColor;
+					originalMessage.attachments[0].fields = [
+						{
+							"title" : "Schedule State",
+							"value" : scheduleState
+						},
+						{
+							"title" : "Owner",
+							"value" : owner
+						},
+						{
+							"title" : "Plan Estimate",
+							"value" : planEstimate
+					];
+					resSuper.send( JSON.stringify( originalMessage ) );
+					
+				}
+			} else {
+				switch( payload.actions[0].name ) {
+					case 'assigntome':
+						break;
+					case 'movetodefined':
+						updateJson.HierarchicalRequirement.ScheduleState = 'Defined';
+						actionText = 'moved to Defined';
+						break;
+					case 'movetoinprogress':
+						updateJson.HierarchicalRequirement.ScheduleState = 'In-Progress';
+						actionText = 'moved to In Progress';
+						break;
+					case 'movetocompleted':
+						updateJson.HierarchicalRequirement.ScheduleState = 'Completed';
+						actionText = 'moved to Completed';
+						break;
+					case 'movetoaccepted':
+						updateJson.HierarchicalRequirement.ScheduleState = 'Accepted';
+						actionText = 'moved to Accepted';
+						break;
+					case 'movetoreleased':
+						updateJson.HierarchicalRequirement.ScheduleState = 'Released';
+						actionText = 'moved to Released';
+						break;
+				}
+
+				var options = {
+					hostname : 'rally1.rallydev.com' ,
+					path  : '/slm/webservice/v2.0/hierarchicalrequirement/' +
+							caacUuid,
+					method  : 'POST',
+					headers : {
+						'Content-type' : 'text/json; charset=utf-8'
+					},
+					auth : apiKey + ':'
+				};
+	
+				// Making update to CAAC
+				console.log( 'Making update to CAAC...' );
+				var req = https.request( options , res => {
+					res.setEncoding( 'utf8' );
+					res.on('data', (d) => {
+					//	console.log( d );
+					});
+				} );
+
+				req.on( 'error' , function (e) {
+					console.log( 'problem with request: ' + e.message );
+				} );
+
+				req.write( JSON.stringify( updateJson ) );
+				req.end();
+			
+				resSuper.setHeader('Content-Type', 'application/json; charset=utf-8');
+				originalMessage.attachments[0].actions = [];
+				originalMessage.attachments[0].fields.push( {
+					"title" : ":white_check_mark: " + slackUserName + " " + actionText + "."
+				} );
+				resSuper.send( JSON.stringify( originalMessage ) );
+			}
 		});
 	});
 });
