@@ -339,11 +339,11 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 					var data = '';
 					
 					resDetails.on('data', (d) => {
-						console.log( d );
 						data = data + d;
 					});
 					
 					resDetails.on('end', () => {
+						console.log ('Response Done!');
 						data = JSON.parse(data);
 						var displayColor = data.HierarchicalRequirement.DisplayColor;
 						var scheduleState = data.HierarchicalRequirement.ScheduleState;
@@ -365,6 +365,9 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 								"value" : planEstimate
 							}
 						];
+						
+						console.log("Sending Results");
+						console.log( originalMessage );
 						resSuper.send( JSON.stringify( originalMessage ) );
 					});
 				} );
