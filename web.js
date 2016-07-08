@@ -401,7 +401,7 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 								"name" : "assigntome",
 								"text" : "Assign to Me",
 								"type" : "button",
-								"value" : projectId + '+' + uuid
+								"value" : caacProjectId + '+' + caacUuid
 							},
 							nextScheduleStateAction
 						];
