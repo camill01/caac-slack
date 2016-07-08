@@ -326,14 +326,15 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 					path  : '/slm/webservice/v2.0/hierarchicalrequirement/' + caacUuid,
 					auth : apiKey + ':',
 					method  : 'GET',
-					headers : {
-						'Content-type' : 'application/x-www-form-urlencoded; charset=utf-8'
-					}
+				//	headers : {
+				//		'Content-type' : 'application/x-www-form-urlencoded; charset=utf-8'
+				//	}
 				};
 				
 				console.log( options );
-				
+				console.log( 'Getting WSAPI story details' );
 				var reqDetails = https.request( options , resDetails => {
+					console.log( 'Processing response...');
 					resDetails.setEncoding( 'utf8' );
 					var data = '';
 					
@@ -371,6 +372,7 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 				reqDetails.on( 'error' , function (e) {
    					console.log( 'problem with request: ' + e.message );
 				} );
+				reqDetails.end();
 			} else {
 				switch( payload.actions[0].name ) {
 					case 'assigntome':
