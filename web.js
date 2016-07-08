@@ -356,6 +356,7 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 						{
 							"title" : "Plan Estimate",
 							"value" : planEstimate
+						}
 					];
 					resSuper.send( JSON.stringify( originalMessage ) );
 					
