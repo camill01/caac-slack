@@ -330,6 +330,9 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 						'Content-type' : 'application/x-www-form-urlencoded; charset=utf-8'
 					}
 				};
+				
+				console.log( options );
+				
 				var req = https.request( options , resOAuth => {
 					resOAuth.setEncoding( 'utf8' );
 					var data = '';
