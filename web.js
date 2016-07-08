@@ -359,8 +359,7 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 						}
 					];
 					resSuper.send( JSON.stringify( originalMessage ) );
-					
-				}
+				} );
 			} else {
 				switch( payload.actions[0].name ) {
 					case 'assigntome':
