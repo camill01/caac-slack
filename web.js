@@ -323,7 +323,7 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 				// Query WSAPI for artifact
 				var options = {
 					hostname : 'rally1.rallydev.com' ,
-					path  : '/slm/webservice/v2.0/hierarchicalRequirement/' + caacUuid,
+					path  : '/slm/webservice/v2.0/hierarchicalrequirement/' + caacUuid,
 					auth : apiKey + ':',
 					method  : 'GET',
 					headers : {
@@ -335,6 +335,7 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 					var data = '';
 					
 					resOAuth.on('data', (d) => {
+						console.log( d );
 						data = data + d;
 					});
 					
