@@ -315,6 +315,8 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 			var updateJson = {};
 			updateJson.HierarchicalRequirement = {};
 			
+			console.log(payload);
+			
 			if ( payload.actions[0].name == 'showdetails' ) {
 				// Query WSAPI for artifact
 				var options = {
