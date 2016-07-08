@@ -282,6 +282,7 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 	console.log('Slack Button Action starting...');
 	
 	var payload = JSON.parse( req.body.payload );
+	console.log(payload);
 	
 	// Fetch Slack Team
 	var slackChannelId = payload.channel.id;
