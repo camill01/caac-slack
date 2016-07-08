@@ -349,24 +349,24 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 						var scheduleState = data.HierarchicalRequirement.ScheduleState;
 						var owner = data.HierarchicalRequirement.Owner._refObjectName;
 						var planEstimate = data.HierarchicalRequirement.PlanEstimate;
+						
+						originalMessage.attachments[0].color = displayColor;
+						originalMessage.attachments[0].fields = [
+							{
+								"title" : "Schedule State",
+								"value" : scheduleState
+							},
+							{
+								"title" : "Owner",
+								"value" : owner
+							},
+							{
+								"title" : "Plan Estimate",
+								"value" : planEstimate
+							}
+						];
+						resSuper.send( JSON.stringify( originalMessage ) );
 					});
-					
-					originalMessage.attachments[0].color = displayColor;
-					originalMessage.attachments[0].fields = [
-						{
-							"title" : "Schedule State",
-							"value" : scheduleState
-						},
-						{
-							"title" : "Owner",
-							"value" : owner
-						},
-						{
-							"title" : "Plan Estimate",
-							"value" : planEstimate
-						}
-					];
-					resSuper.send( JSON.stringify( originalMessage ) );
 				} );
 				
 				reqDetails.on( 'error' , function (e) {
