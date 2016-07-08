@@ -91,7 +91,7 @@ pg.connect( process.env.DATABASE_URL, function( err, client ) {
 													"name" : "showdetails",
 													"text" : "Show Details",
 													"type" : "button",
-													"value" : uuid + 'b7913f8d-d85d-4d75-8dc3-7b27776e1633'
+													"value" : uuid + '+' + 'b7913f8d-d85d-4d75-8dc3-7b27776e1633'
 												}
 											]
 										}
