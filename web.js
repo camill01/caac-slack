@@ -371,7 +371,7 @@ app.post('/slack/buttonaction', urlParser, function (req, resSuper) {
 						if ( scheduleState != 'Released' ) {
 							nextScheduleStateAction = {};
 							nextScheduleStateAction.type = "button";
-							nextScheduleStateAction.value = projectId + '+' + uuid;
+							nextScheduleStateAction.value = caacProjectId + '+' + caacUuid;
 							switch( scheduleState ) {
 								case 'Idea':
 									nextScheduleStateAction.name = "movetodefined";
