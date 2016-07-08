@@ -84,6 +84,7 @@ pg.connect( process.env.DATABASE_URL, function( err, client ) {
 											"fallback" : " <" + link + "|" + workItemId + ':' + name + ">",
 											"color" : 'black',
 											"title" : workItemId + ": " + name,
+											"callback_id" : "show_details",
 											"title_link" : link,
 											"actions" : [
 												{
